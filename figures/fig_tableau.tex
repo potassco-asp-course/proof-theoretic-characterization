@@ -1,0 +1,169 @@
+\arrayrulewidth=.1pt
+{\scriptsize % \ptsize{8} % \footnotesize
+\[\hspace{-0.75cm}
+\begin{array}{@{}rclp{5pt}rcl}
+  \text{(FTB)}
+  &
+  \begin{array}{c}
+    p \leftarrow l_1, \dots, l_n
+    \\
+    \plit{l_1},\dots,\plit{l_n}
+    \\\hline
+    \Tsigned{\{l_1, \dots, l_n\}}
+  \end{array}
+  &
+  &&
+  \text{(BFB)}
+  &
+  \begin{array}{c}
+    \Fsigned{\{l_1, \dots, l_i, \dots, l_n\}}
+    \\
+    \plit{l_1},\dots,\plit{l_{i-1}}
+    ,
+    \plit{l_{i+1}},\dots,\plit{l_n}
+    \\\hline
+    \nlit{l_i}
+  \end{array}
+  &
+  \\[12pt]
+  \text{(FTA)}
+  &
+  \begin{array}{c}
+    p \leftarrow l_1, \dots, l_n
+    \\
+    \Tsigned{\{l_1, \dots, l_n\}}
+    \\\hline
+    \Tsigned{p}
+  \end{array}
+  &
+  &&
+  \text{(BFA)}
+  &
+  \begin{array}{c}
+    p \leftarrow l_1, \dots, l_n
+    \\
+    \Fsigned{p}
+    \\\hline
+    \Fsigned{\{l_1, \dots, l_n\}}
+  \end{array}
+  &
+  \\[12pt]
+  \text{(FFB)}
+  &
+  \begin{array}{c}
+    p \leftarrow l_1, \dots, l_i, \dots, l_n
+    \\
+    \nlit{l_i}
+    \\\hline
+    \Fsigned{\{l_1, \dots, l_i, \dots, l_n\}}
+  \end{array}
+  &
+  &&
+  \text{(BTB)}
+  &
+  \begin{array}{c}
+    \Tsigned{\{l_1, \dots, l_i, \dots, l_n\}}
+    \\\hline
+    \plit{l_i}
+  \end{array}
+  &
+  \\[12pt]
+  \text{(FFA)}
+  &
+  \begin{array}{c}
+    \Fsigned{B_1},\dots,\Fsigned{B_m}
+    \\\hline
+    \Fsigned{p}
+  \end{array}
+  & \Proviso{\S}
+  &&
+  \text{(BTA)}
+  &
+  \begin{array}{c}
+    \Tsigned{p}
+    \\
+    \Fsigned{B_1},\dots,\Fsigned{B_{i-1}}
+    ,
+    \Fsigned{B_{i+1}},\dots,\Fsigned{B_m}
+    \\\hline
+    \Tsigned{B_i}
+  \end{array}
+  & \Proviso{\S}
+  \\[12pt]
+  \text{(WFN)}
+  &
+  \begin{array}{c}
+    \Fsigned{B_1},\dots,\Fsigned{B_m}
+    \\\hline
+    \Fsigned{p}
+  \end{array}
+  & \Proviso{\dagger}
+  &&
+  \text{(WFJ)}
+  &
+  \begin{array}{c}
+    \Tsigned{p}
+    \\
+    \Fsigned{B_1},\dots,\Fsigned{B_{i-1}}
+    ,
+    \Fsigned{B_{i+1}},\dots,\Fsigned{B_m}
+    \\\hline
+    \Tsigned{B_i}
+  \end{array}
+  & \Proviso{\dagger}
+  \\[12pt]
+  \text{(FL)}
+  &
+  \begin{array}{c}
+    \Fsigned{B_1},\dots,\Fsigned{B_m}
+    \\\hline
+    \Fsigned{p}
+  \end{array}
+  & \Proviso{\ddagger}
+  &&
+  \text{(BL)}
+  &
+  \begin{array}{c}
+    \Tsigned{p}
+    \\
+    \Fsigned{B_1},\dots,\Fsigned{B_{i-1}}
+    ,
+    \Fsigned{B_{i+1}},\dots,\Fsigned{B_m}
+    \\\hline
+    \Tsigned{B_i}
+  \end{array}
+  & \Proviso{\ddagger}
+  \\[5pt]
+  \multicolumn{7}{@{}c}{%
+  \begin{array}{@{}rcl}
+    \text{(Cut[$X$])}
+    &
+    \begin{array}{c}
+     \mbox{}
+     \\\hline
+     \Tsigned{v} \;\;\; | \;\;\; \Fsigned{v}
+    \end{array}
+    & \Proviso{\sharp[X]}
+  \end{array}}
+%   \\[12pt]
+%   \multicolumn{7}{c}{%
+%   \begin{array}[t]{rlp{1pt}rl}
+%     (\S)& \body{p} = \{B_1,\dots,B_m\}
+%     &&
+%     (\dagger)& \{B_1,\dots,B_m\}\subseteq\body{P},
+%                  \ p \in \gus{\{r\in P\mid
+%                               \body{r}\not\in\{B_1,\dots,B_m\}\},\emptyset}
+%     \\
+%     (\ddagger)& p \in L, L \in \loops{P},
+%                   \ \extbody{L} = \{B_1,\dots,B_m\}
+%     &&
+%     (\sharp[X])& v \in X
+%   \end{array}}
+\end{array}
+\]}
+% \scriptsize
+% See paper for formal details on provisos $(\S)$, $(\dagger)$, $(\ddagger)$, and $(\sharp[X])$.
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../asp"
+%%% End:

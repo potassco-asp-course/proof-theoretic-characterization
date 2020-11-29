@@ -1,0 +1,2058 @@
+%------------------------------------------------------------
+\section{Tableau Calculi}
+%------------------------------------------------------------
+\begin{frame}{Motivation}
+  \bigskip
+  \begin{itemize}
+  \item<1-> \structure{Goal} Analyze computations in ASP solvers
+    \smallskip
+  \item<1-> \structure{Wanted}
+    A declarative and fine-grained instrument for \\ characterizing
+    operations as well as strategies of ASP solvers
+    \bigskip
+  \item<2-> \structure{Idea}
+    View stable model computations as derivations in\\ an inference system
+  \item<3-> [] Consider \alert{Tableau-based proof systems} for analyzing ASP solving
+\end{itemize}
+\end{frame}
+% ------------------------------------------------------------
+\begin{frame}{Tableau calculi}
+  \bigskip
+  \begin{itemize}
+  \item Traditionally, tableau calculi are used for
+    \begin{itemize}
+    \item automated theorem proving and
+    \item proof theoretical analysis
+    \end{itemize}
+    in classical as well as non-classical logics
+    \medskip
+  \item \structure{General idea}
+    Given an input, prove some property by decomposition
+    Decomposition is done by applying deduction rules
+  \item For details, see \emph{Handbook of Tableau Methods}, Kluwer, 1999
+  \end{itemize}
+\end{frame}
+% ------------------------------------------------------------
+\begin{frame}{General definitions}
+
+\begin{itemize}
+\item
+A \alert{tableau} is a (mostly binary) tree
+\item
+A \alert{branch} in a tableau is a path from the root to a leaf
+\item<2->
+A branch containing $\gamma_1,\dots,\gamma_m$ can be extended by
+applying\\ \alert{tableau rules} of form
+\[
+\begin{array}[t]{c}
+\gamma_1,\dots,\gamma_m\\
+\hline
+\alpha_1\\[-1mm]
+\vdots\\[-2mm]
+\alpha_n
+\end{array}
+\qquad\qquad\pause[3]\qquad\qquad
+\begin{array}[t]{c}
+\gamma_1,\dots,\gamma_m\\
+\hline
+\beta_1\; \mid \; \dots \; \mid \;\beta_n
+\end{array}
+\qquad\qquad
+\]
+\item<2->
+Rules of the former format append entries $\alpha_1,\dots,\alpha_n$ to the branch
+\item<3->
+Rules of the latter format create multiple sub-branches for $\beta_1,\dots,\beta_n$
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Example}
+  \begin{itemize}
+  \item<1-> A simple tableau calculus for proving unsatisfiability of propositional
+    formulas, composed from $\neg$, $\wedge$, and $\vee$, consists of rules
+    \[
+    \begin{array}[t]{c}
+      \neg\neg \alpha\\
+      \hline
+      \alpha
+    \end{array}
+    \qquad
+    \begin{array}[t]{c}
+      \alpha_1 \wedge \alpha_2 \\
+      \hline
+      \alpha_1\\[-1mm]
+      \alpha_2
+    \end{array}
+    \qquad
+    \begin{array}[t]{c}
+      \beta_1 \vee \beta_2 \\
+      \hline
+      \beta_1 \;\; \mid \;\; \beta_2
+    \end{array}
+    \]
+  \item<2-> All rules are semantically valid, when interpreting entries in a branch conjunctively and distinct (sub-)branches as connected disjunctively
+  \item<3->
+    A propositional formula $\varphi$ % (composed from $\neg$, $\wedge$, and $\vee$)
+    is unsatisfiable iff
+    there is a tableau with\\ $\varphi$ as the root node such that
+    \begin{enumerate}
+    \item all other entries can be produced by tableau rules and
+    \item every branch contains some formulas $\alpha$ and $\neg\alpha$
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Example}
+
+\[\hspace{1cm}
+\begin{array}{lcccccr}
+\textbf{(1)}
+& & &
+a \wedge ((\neg b \wedge (\neg a \vee b)) \vee  \neg\neg\neg a)
+& & &
+[\varphi]
+\\
+\onslide<2->\textbf{(2)}
+& & &
+\onslide<2->\alert<6,9>{a}
+& & &
+\onslide<2->[\text{1}]
+\\
+\onslide<2->\textbf{(3)}
+& & &
+\onslide<2->(\neg b \wedge (\neg a \vee b)) \vee  \neg\neg\neg a
+& & &
+\onslide<2->[\text{1}]
+\\[2mm]
+& & &
+\hspace{-10cm}
+\begin{array}{lcccrcccclcccr}
+\onslide<3->\textbf{(4)}
+& &
+\onslide<3->\neg b \wedge (\neg a \vee b)
+& &
+\onslide<3->[\text{3}]
+& & & & &
+\onslide<3->\textbf{(9)}
+& &
+\onslide<3->\neg\neg\neg a
+& &
+\onslide<3->[\text{3}]
+\\
+\onslide<4->\textbf{(5)}
+& &
+\onslide<4->\alert<7>{\neg b}
+& &
+\onslide<4->[\text{4}]
+& & & & &
+\onslide<8->\textbf{(10)}
+& &
+\onslide<8->\alert<9>{\neg a}
+& &
+\onslide<8->[\text{9}]
+\\
+\onslide<4->\textbf{(6)}
+& &
+\onslide<4->\neg a \vee b
+& &
+\onslide<4->[\text{4}]
+\\[1mm]
+& &
+\hspace{-5cm}
+\begin{array}{lcrcccclcr}
+\onslide<5->\textbf{(7)}
+&
+\onslide<5->\alert<6>{\neg a}
+&
+\onslide<5->[\text{6}]
+& & & &
+\onslide<5->\textbf{(8)}
+&
+\onslide<5->\alert<7>{b}
+&
+\onslide<5->[\text{6}]
+\end{array}
+\hspace{-5cm}
+\end{array}
+\hspace{-10cm}
+\end{array}
+\]
+\begin{itemize}
+\item <10->
+All three branches of the tableau are contradictory (cf 2, 5, 7, 8, 10)
+\item <11-> Hence, $a \wedge ((\neg b \wedge (\neg a \vee b)) \vee  \neg\neg\neg a)$ is unsatisfiable
+\end{itemize}
+\end{frame}
+%------------------------------------------------------------
+\section{Tableau Calculi for ASP}
+% ------------------------------------------------------------
+\begin{frame}{Tableaux and ASP}
+  \bigskip
+  \begin{itemize}
+  \item<1-> A tableau rule captures an elementary inference scheme in an\\ ASP solver
+    \smallskip
+  \item<2-> A \alert{branch} in a tableau corresponds to a successful or unsuccessful
+    \alert{computation} of a stable model
+    \smallskip
+  \item<3-> An \alert{entire tableau} represents a traversal of the \alert{search space}
+  \end{itemize}
+\end{frame}
+% ------------------------------------------------------------
+\begin{frame}{ASP-specific definitions}
+  \begin{itemize}
+  \item<1-> A (signed) \alert{tableau} for a logic program $P$ is a binary tree such that
+    \begin{itemize}
+    \item the root node of the tree consists of the rules in $P$;
+    \item the other nodes in the tree are \alert{entries} of the form \Tsigned{v}
+      or \Fsigned{v}, called \alert{signed literals}, where $v$ is a variable,
+    \item generated by extending a tableau using deduction rules (given below)
+    \end{itemize}
+    \smallskip
+  \item<2-> An entry $\Tsigned{v}$ ($\Fsigned{v}$) reflects that variable $v$ is
+    $\mathit{true}$ ($\mathit{false}$) in a corresponding variable assignment
+  \item<2->[] A set of signed literals constitutes a partial assignment
+    \smallskip
+  \item<3-> For a normal logic program P,
+    \begin{itemize}
+    \item atoms of $P$ in $\atom{P}$ and
+    \item bodies of $P$ in $\body{P}$ %  = \{\body{r} \mid r\in P\}$
+    \end{itemize}
+    can occur as variables in signed literals
+  \end{itemize}
+\end{frame}
+% ------------------------------------------------------------
+\begin{frame}{Tableau rules for ASP at a glance}
+  \vspace*{-5mm}
+  \input{characterizations/fig_tableau}
+\end{frame}
+% ------------------------------------------------------------
+\begin{frame}[c]{More concepts}
+  \begin{itemize}
+  \item <1-> A \alert{tableau calculus} is a set of tableau rules
+  \item <2-> A branch in a tableau is \alert{conflicting},\\
+    if it contains both $\Tsigned{v}$ and $\Fsigned{v}$ for some variable $v$
+  \item <3-> A branch in a tableau is \alert{total} for a program $P$,\\
+    if it contains either $\Tsigned{v}$ or $\Fsigned{v}$ for each $v \in \atom{P} \cup \body{P}$
+  \item <4-> A branch in a tableau of some calculus $\mathcal{T}$ is \alert{closed},\\
+    if no rule in $\mathcal{T}$ other than \textit{Cut} can produce any new entries
+  \item <5-> A branch in a tableau is \alert{complete},\\
+    if it is either conflicting or both total and closed
+  \item <6-> A tableau is \alert{complete}, if all its branches are complete
+  \item <7-> A tableau of some calculus $\mathcal{T}$ is a \alert{refutation} of $\mathcal{T}$ for a program $P$,\\
+    if every branch in the tableau is conflicting
+  \end{itemize}
+\end{frame}
+% ------------------------------------------------------------
+\begin{frame}{Example}
+  \begin{itemize}
+  \item Consider the program
+    \[
+    P
+    =
+    \left\{
+      \begin{array}{l}
+        a\leftarrow\\
+        c\leftarrow \naf{b}, \naf{d}\\
+        d\leftarrow a, \naf{c}
+      \end{array}
+    \right\}
+    \]
+  \item [] having stable models $\{a,c\}$ and $\{a,d\}$
+  \end{itemize}
+\end{frame}
+%------------------------------------------------------------
+\begin{frame}{(Previewed) Example}
+\[
+{\small
+\begin{array}{@{}rc}
+&a\leftarrow              \\
+&c\leftarrow \naf{b},\naf{d}  \\
+&d\leftarrow     a,\naf{c}
+\\[3pt]
+\onslide<2->(\mathsf{FTB})&\onslide<2->\Tsigned{\emptyset}         \\
+\onslide<2->(\mathsf{FTA})&\onslide<2->\alert<6>{\Tsigned{a}} \\
+\onslide<2->(\mathsf{FFA})&\onslide<2->\Fsigned{b}
+\\
+\onslide<3->(\mathsf{Cut}[\atom{P}])&
+\begin{array}[t]{@{}rcp{30pt}rc}
+                 &\onslide<3->\alert<6>{\Tsigned{c}}         & &               & \onslide<3->\Fsigned{c}                 \pause\\
+ \onslide<4->(\mathsf{BTA})  &\onslide<4->\Tsigned{\{\naf{b},\naf{d}\}}   & & \onslide<5->(\mathsf{BFA})& \onslide<5->\Fsigned{\{\naf{b},\naf{d}\}}         \\
+ \onslide<4->(\mathsf{BTB})  &\onslide<4->\Fsigned{d}                 & & \onslide<5->(\mathsf{BFB})& \onslide<5->\alert<6>{\Tsigned{d}}       \\
+ \onslide<4->(\mathsf{FFB})  &\onslide<4->\Fsigned{\{a,\naf{c}\}}       & & \onslide<5->(\mathsf{FTB})& \onslide<5->\Tsigned{\{a,\naf{c}\}}
+\end{array}
+\end{array}
+}
+\]
+\end{frame}
+% ------------------------------------------------------------
+\begin{frame}{Auxiliary definitions}
+  \bigskip
+  \begin{itemize}
+  \item<1->
+    For a literal $l$, define conjugation functions \plit{} and \nlit{} as follows
+    \[
+    \begin{array}{rcl}
+      \plit{l}
+      &=&
+      \left\{
+        \begin{array}{ll}
+          \Tsigned{l}&\text{if $l$ is an atom} % l\in\mathcal{A}
+          \\
+          \Fsigned{a}&\text{if $l=\naf{a}$ for an atom $a$} % a\in\mathcal{A}
+        \end{array}
+      \right.
+      \\[20pt]
+      \nlit{l}
+      &=&
+      \left\{
+        \begin{array}{ll}
+          \Fsigned{l}&\text{if $l$ is an atom} %  l\in\mathcal{A}
+          \\
+          \Tsigned{a}&\text{if $l=\naf{a}$ for an atom $a$} % a\in\mathcal{A}
+        \end{array}
+      \right.
+    \end{array}
+    \]
+  \item<2-> \structure{Examples}
+    $\plit{a}=\Tsigned{a}$, $\nlit{a}=\Fsigned{a}$, $\plit{\naf{a}}=\Fsigned{a}$, and $\nlit{\naf{a}}=\Tsigned{a}$
+\end{itemize}
+\end{frame}
+% ------------------------------------------------------------
+\begin{frame}{Auxiliary definitions}
+  \begin{itemize}
+  \item Some tableau rules require conditions for their application
+  \item Such conditions are specified as \alert{provisos}
+    \[
+    \begin{array}{lcr}
+      \begin{array}{cl}
+        \textit{prerequisites} &
+        \raisebox{-8pt}[0pt][0pt]{(\textit{proviso})}
+        \\\cline{1-1}
+        \textit{consequence}
+      \end{array}
+      & \hspace{1.5cm} &
+      \textit{proviso\/}{:}\text{ some condition(s)}
+    \end{array}
+    \]
+    \bigskip
+  \item \structure{Note} All tableau rules given in the sequel are stable model preserving
+  \end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Forward true body (FTB)}
+\begin{itemize}
+\item \structure{Prerequisites} All of a body's literals are $\mathit{true}$
+\item \structure{Consequence} The body is $\mathit{true}$
+\item \structure{Tableau Rule FTB}
+\[
+\begin{array}{c}
+p \leftarrow l_1,\dots,l_n \\
+\plit{l_1},\dots,\plit{l_n} \\\hline
+\Tsigned{\{l_1,\dots,l_n\}}
+\end{array}
+\]
+\item<2-> \structure{Example}
+\[
+\begin{array}{c}
+a \leftarrow b, \naf{c} \\
+\Tsigned{b} \\
+\Fsigned{c} \\\hline
+\Tsigned{\{b, \naf{c}\}}
+\end{array}
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Backward false body (BFB)}
+\begin{itemize}
+\item \structure{Prerequisites}
+  A body is $\mathit{false}$, and all its literals except for one are $\mathit{true}$
+\item \structure{Consequence} The residual body literal is $\mathit{false}$
+\item \structure{Tableau Rule BFB}
+\[
+\begin{array}{c}
+\Fsigned{\{l_1,\dots,l_i,\dots,l_n\}} \\
+\plit{l_1},\dots,\plit{l_{i-1}},\plit{l_{i+1}},\dots,\plit{l_n} \\\hline
+\nlit{l_i}
+\end{array}
+\]
+\item<2-> \structure{Examples}
+\[
+\begin{array}{c}
+\Fsigned{\{b, \naf{c}\}} \\
+\Tsigned{b} \\\hline
+\Tsigned{c}
+\end{array}
+\qquad\qquad
+\begin{array}{c}
+\Fsigned{\{b, \naf{c}\}} \\
+\Fsigned{c} \\\hline
+\Fsigned{b}
+\end{array}
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Forward false body (FFB)}
+\begin{itemize}
+\item \structure{Prerequisites} Some literal of a body is $\mathit{false}$
+\item \structure{Consequence} The body is $\mathit{false}$
+\item \structure{Tableau Rule FFB}
+\[
+\begin{array}{c}
+p \leftarrow l_1,\dots,l_i,\dots,l_n \\
+\nlit{l_i} \\\hline
+\Fsigned{\{l_1,\dots,l_i,\dots,l_n\}}
+\end{array}
+\]
+\item<2-> \structure{Examples}
+\[
+\begin{array}{c}
+a \leftarrow b, \naf{c} \\
+\Fsigned{b} \\\hline
+\Fsigned{\{b, \naf{c}\}}
+\end{array}
+\qquad\qquad
+\begin{array}{c}
+a \leftarrow b, \naf{c} \\
+\Tsigned{c} \\\hline
+\Fsigned{\{b, \naf{c}\}}
+\end{array}
+\hfill
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Backward true body (BTB)}
+\begin{itemize}
+\item \structure{Prerequisites} A body is $\mathit{true}$
+\item \structure{Consequence} The body's literals are $\mathit{true}$
+\item \structure{Tableau Rule BTB}
+\[
+\begin{array}{c}
+\Tsigned{\{l_1,\dots,l_i,\dots,l_n\}} \\\hline
+\plit{l_i}
+\end{array}
+\]
+\item<2-> \structure{Examples}
+\[
+\begin{array}{c}
+\Tsigned{\{b, \naf{c}\}} \\\hline
+\Tsigned{b}
+\end{array}
+\qquad\qquad
+\begin{array}{c}
+\Tsigned{\{b, \naf{c}\}} \\\hline
+\Fsigned{c}
+\end{array}
+\hfill
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Tableau rules for bodies}
+Consider rule body $B=\{l_1,\dots,l_n\}$
+\bigskip
+\begin{itemize}
+\item<1-> Rules FTB and BFB amount to implication
+  \[
+  l_1 \wedge \dots \wedge l_n \rightarrow B
+  \]
+\item<2-> Rules FFB and BTB amount to implication
+  \[
+  B \rightarrow l_1 \wedge \dots \wedge l_n
+  \]
+\item<3-> Together they yield
+  \[
+  B \leftrightarrow l_1 \wedge \dots \wedge l_n
+  \]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Forward true atom (FTA)}
+\begin{itemize}
+\item \structure{Prerequisites} Some of an atom's bodies is $\mathit{true}$
+\item \structure{Consequence} The atom is $\mathit{true}$
+\item \structure{Tableau Rule FTA}
+\[
+\begin{array}{c}
+p \leftarrow l_1,\dots,l_n \\
+\Tsigned{\{l_1,\dots,l_n\}} \\\hline
+\Tsigned{p}
+\end{array}
+\]
+\item<2-> \structure{Examples}
+\[
+\begin{array}{c}
+a \leftarrow b, \naf{c} \\
+\Tsigned{\{b, \naf{c}\}} \\\hline
+\Tsigned{a}
+\end{array}
+\qquad\qquad
+\begin{array}{c}
+a \leftarrow d, \naf{e} \\
+\Tsigned{\{d, \naf{e}\}} \\\hline
+\Tsigned{a}
+\end{array}
+\hfill
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Backward false atom (BFA)}
+\begin{itemize}
+\item \structure{Prerequisites} An atom is $\mathit{false}$
+\item \structure{Consequence} The bodies of all rules with the atom as head are $\mathit{false}$
+\item \structure{Tableau Rule BFA}
+\[
+\begin{array}{c}
+p \leftarrow l_1,\dots,l_n \\
+\Fsigned{p} \\\hline
+\Fsigned{\{l_1,\dots,l_n\}}
+\end{array}
+\]
+\item<2-> \structure{Examples}
+\[
+\begin{array}{c}
+a \leftarrow b, \naf{c} \\
+\Fsigned{a} \\\hline
+\Fsigned{\{b, \naf{c}\}}
+\end{array}
+\qquad\qquad
+\begin{array}{c}
+a \leftarrow d, \naf{e} \\
+\Fsigned{a} \\\hline
+\Fsigned{\{d, \naf{e}\}}
+\end{array}
+\hfill
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Forward false atom (FFA)}
+\begin{itemize}
+\item \structure{Prerequisites} For some atom, the bodies of all rules with the atom as head are $\mathit{false}$
+\item \structure{Consequence} The atom is $\mathit{false}$
+\item \structure{Tableau Rule FFA}
+\[
+\begin{array}{cl}
+\Fsigned{B_1},\dots,\Fsigned{B_m} &
+\raisebox{-8pt}[0pt][0pt]{($\atbody{P}{p} = \{B_1,\dots,B_m\}$)}
+\\\cline{1-1}
+\Fsigned{p}
+\end{array}
+\]
+% \item\structure{Note} \ $\atbody{P}{a}=\{\body{r}\mid r\in P,\head{r}=a\}$
+\item<2-> \structure{Example}
+\[
+\begin{array}{cl}
+\Fsigned{\{b,\naf{c}\}} \\
+\Fsigned{\{d,\naf{e}\}} &
+\raisebox{-8pt}[0pt][0pt]{($\atbody{P}{a} = \{\{b,\naf{c}\},\{d,\naf{e}\}\}$)}
+\\\cline{1-1}
+\Fsigned{a}
+\end{array}
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Backward true atom (BTA)}
+\begin{itemize}
+\item \structure{Prerequisites}
+  An atom is $\mathit{true}$, and the bodies of all rules with the atom as head except for one are $\mathit{false}$
+\item \structure{Consequence} The residual body is $\mathit{true}$
+\item \structure{Tableau Rule BTA}
+\[
+\begin{array}{cl}
+\Tsigned{p} \\
+\Fsigned{B_1},\dots,\Fsigned{B_{i-1}},\Fsigned{B_{i+1}},\dots,\Fsigned{B_m} &
+\raisebox{-8pt}[0pt][0pt]{($\atbody{P}{p} = \{B_1,\dots,B_m\}$)}
+\\\cline{1-1}
+\Tsigned{B_i}
+\end{array}
+\]
+\item<2-> \structure{Examples}
+\[
+\begin{array}{cl}
+\Tsigned{a} \\
+\Fsigned{\{b,\naf{c}\}} &
+\raisebox{-8pt}[0pt][0pt]{$(*)$}
+\\\cline{1-1}
+\Tsigned{\{d,\naf{e}\}}
+\end{array}
+\qquad\qquad
+\begin{array}{cl}
+\Tsigned{a} \\
+\Fsigned{\{d,\naf{e}\}} &
+\raisebox{-8pt}[0pt][0pt]{$(*)$}
+\\\cline{1-1}
+\Tsigned{\{b,\naf{c}\}}
+\end{array}
+\hfill
+\]
+\[
+\hfill
+(*)\quad \atbody{P}{a} = \{\{b,\naf{c}\},\{d,\naf{e}\}\}
+\hfill\hfill
+\]
+%\vspace{-1cm}
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Tableau rules for atoms}
+Consider an atom~$p$ such that $\atbody{P}{p}=\{B_1,\dots,B_m\}$
+\bigskip
+\begin{itemize}
+\item<1-> Rules FTA and BFA amount to implication
+  \[
+  B_1 \vee \dots \vee B_m \rightarrow p
+  \]
+\item<2-> Rules FFA and BTA amount to implication
+  \[
+  p \rightarrow B_1 \vee \dots \vee B_m
+  \]
+\item<3-> Together they yield
+  \[
+  p \leftrightarrow B_1 \vee \dots \vee B_m
+  \]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Relationship with program completion}
+Let $P$ be a normal logic program
+
+\begin{itemize}
+\item <1-> The eight tableau rules introduced so far essentially provide
+  (straightforward) inferences from $\CF{P}$  % \end{itemize}
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Preliminaries for unfounded sets}
+
+Let $P$ be a normal logic program
+\begin{itemize}
+\item<1-> For $P'\subseteq P$, define the \alert{greatest unfounded set} of $P$ wrt $P'$ as
+\[
+\mathbf{U}_P(P') = \atom{P}\setminus \Cn{\reduct{(P')}{\emptyset}}
+\]
+% \begin{itemize}
+% \item \structure{Note} The rule-based definition of the greatest unfounded set
+%   is more flexible than the atom-based one
+% \end{itemize}
+\item<2-> For a loop $L \in \loops{P}$, define the \alert{external bodies} of $L$ as
+\[
+\EB{L}{P} = \{\body{r} \mid r \in P, \head{r} \in L, \pbody{r} \cap L = \emptyset\}
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Well-founded negation (WFN)}
+\begin{itemize}
+\item \structure{Prerequisites} An atom is in the greatest unfounded set wrt rules whose bodies are $\mathit{false}$
+\item \structure{Consequence} The atom is $\mathit{false}$
+\item \structure{Tableau Rule WFN}
+\[
+\hspace{-5mm}
+\begin{array}{@{}cl}
+\Fsigned{B_1},\dots,\Fsigned{B_m} &
+\raisebox{-8pt}[0pt][0pt]{($p \in \mathbf{U}_P(\{r \in P \mid \body{r} \not\in \{B_1,\dots,B_m\}\})$)}
+\\\cline{1-1}
+\Fsigned{p}
+\end{array}
+\]
+\item<2-> \structure{Examples}
+\[
+\begin{array}[b]{cl}
+a \leftarrow \naf{b} \\
+\Fsigned{\{\naf{b}\}} &
+\raisebox{-8pt}[0pt][0pt]{$(*)$}
+\\\cline{1-1}
+\Fsigned{a}
+\end{array}
+\qquad\qquad
+\begin{array}[b]{cl}
+a \leftarrow a \\
+a \leftarrow \naf{b} \\
+\Fsigned{\{\naf{b}\}} &
+\raisebox{-8pt}[0pt][0pt]{$(*)$}
+\\\cline{1-1}
+\Fsigned{a}
+\end{array}
+\hfill
+\]
+\[
+\hfill
+(*)\quad a \in \mathbf{U}_P(P \setminus \{a \leftarrow \naf{b}\})
+\hfill\hfill
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Well-founded justification (WFJ)}
+\begin{itemize}
+\item \structure{Prerequisites} A $\mathit{true}$ atom is in the greatest unfounded set wrt rules whose bodies are $\mathit{false}$,
+  if a particular body is made $\mathit{false}$
+\item \structure{Consequence} The respective body is $\mathit{true}$
+\item \structure{Tableau Rule WFJ} %~\\[-4mm]
+\[
+\hspace{-10mm}
+{\small
+\begin{array}{@{}cl}
+\Tsigned{p} \\
+\Fsigned{B_1},\dots,\Fsigned{B_{i-1}},\Fsigned{B_{i+1}},\dots,\Fsigned{B_m} &
+\raisebox{-8pt}[0pt][0pt]{($p \in \mathbf{U}_P(\{r \in P \mid \body{r} \not\in \{B_1,\dots,B_m\}\})$)}
+\\\cline{1-1}
+\Tsigned{B_i}
+\end{array}
+}
+\]
+\item<2-> \structure{Examples} %~\\[-5mm]
+\[
+\begin{array}[b]{cl}
+a \leftarrow \naf{b} \\
+\Tsigned{a} &
+\raisebox{-8pt}[0pt][0pt]{$(*)$}
+\\\cline{1-1}
+\Tsigned{\{\naf{b}\}}
+\end{array}
+\qquad\qquad
+\begin{array}[b]{cl}
+a \leftarrow a \\
+a \leftarrow \naf{b} \\
+\Tsigned{a} &
+\raisebox{-8pt}[0pt][0pt]{$(*)$}
+\\\cline{1-1}
+\Tsigned{\{\naf{b}\}}
+\end{array}
+\hfill
+\]
+\[
+\hfill
+(*)\quad a \in \mathbf{U}_P(P \setminus \{a \leftarrow \naf{b}\})
+\hfill\hfill
+\]
+%\vspace{-1cm}
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Well-founded tableau rules}
+  \begin{itemize}
+  \item<1-> Tableau rules WFN and WFJ ensure non-circular support for $\mathit{true}$ atoms
+  \item <2-> \structure{Note}
+    \begin{enumerate}
+    \item WFN subsumes falsifying atoms via FFA,
+    \item WFJ can be viewed as ``backward propagation'' for unfounded sets,
+    \item WFJ subsumes backward propagation of $\mathit{true}$ atoms via BTA
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Relationship with well-founded operator}
+\bigskip
+Let $P$ be a normal logic program,
+$\langle T,F \rangle$ a partial interpretation, and\\
+$P'=\{r\in P \mid \pbody{r}\cap F=\emptyset \text{ and } \nbody{r}\cap T=\emptyset\}$.\\
+\bigskip
+\begin{itemize}
+\item <2-> The following conditions are equivalent
+  \begin{enumerate}
+  \item $p\in\mathbf{U}_P\langle T,F \rangle$
+  \item $p\in\mathbf{U}_P(P')$
+  \end{enumerate}
+  \medskip
+\item<3-> Hence, the well-founded operator $\mathbf{\Omega}$ and WFN coincide
+\item<4-> \structure{Note} In contrast to $\mathbf{\Omega}$, WFN does not necessarily require a rule
+  body to contain a $\mathit{false}$ literal for the rule being inapplicable
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Forward loop (FL)}
+
+\begin{itemize}
+\item \structure{Prerequisites} The external bodies of a loop are $\mathit{false}$
+\item \structure{Consequence} The atoms in the loop are $\mathit{false}$
+\item \structure{Tableau Rule FL}
+\[
+\begin{array}{@{}cl}
+\Fsigned{B_1},\dots,\Fsigned{B_m} &
+\raisebox{-8pt}[0pt][0pt]{($p \in L, L \in \loops{P}, \EB{L}{P}=\{B_1,\dots,B_m\}$)}
+\\\cline{1-1}
+\Fsigned{p}
+\end{array}
+\]
+\item<2-> \structure{Example}
+\[
+\begin{array}{cl}
+a \leftarrow a \\
+a \leftarrow \naf{b} \\
+\Fsigned{\{\naf{b}\}} &
+\raisebox{-8pt}[0pt][0pt]{($\EB{\{a\}}{P}=\{\{\naf{b}\}\}$)}
+\\\cline{1-1}
+\Fsigned{a}
+\end{array}
+\]
+%\vspace{-1cm}
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Backward loop (BL)}
+
+\begin{itemize}
+\item \structure{Prerequisites} An atom of a loop is $\mathit{true}$,
+  and all external bodies except for one are $\mathit{false}$
+\item \structure{Consequence} The residual external body is $\mathit{true}$
+\item \structure{Tableau Rule BL}
+\[
+\hspace{-10mm}
+{\small
+\begin{array}{@{}cl}
+\Tsigned{p} \\
+\Fsigned{B_1},\dots,\Fsigned{B_{i-1}},\Fsigned{B_{i+1}},\dots,\Fsigned{B_m} &
+\raisebox{-8pt}[0pt][0pt]{($p \in L, L \in \loops{P}, \EB{L}{P}=\{B_1,\dots,B_m\}$)}
+\\\cline{1-1}
+\Tsigned{B_i}
+\end{array}
+}
+\]
+\item<2-> \structure{Example}
+\[
+\begin{array}{cl}
+a \leftarrow a \\
+a \leftarrow \naf{b} \\
+\Tsigned{a}&
+\raisebox{-8pt}[0pt][0pt]{($\EB{\{a\}}{P}=\{\{\naf{b}\}\}$)}
+\\\cline{1-1}
+\Tsigned{\{\naf{b}\}}
+\end{array}
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Tableau rules for loops}
+  \begin{itemize}
+  \item<1-> Tableau rules FL and BL ensure non-circular support for $\mathit{true}$ atoms
+  \item<2-> For a loop $L$ such that $\EB{L}{P}=\{B_1,\dots,B_m\}$,\\
+    they amount to implications of form
+    \[
+    \textstyle\bigvee_{p\in L} p \rightarrow B_1 \vee\dots\vee B_m
+    \]
+  \item<3-> Comparison to well-founded tableau rules yields
+    \begin{itemize}
+    \item FL (plus FFA and FFB) is equivalent to WFN (plus FFB),
+    \item BL cannot simulate inferences via WFJ
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Relationship with loop formulas}
+  \bigskip
+  \begin{itemize}
+  \item <1-> Tableau rules FL and BL essentially provide (straightforward) inferences from loop formulas
+    \begin{itemize}
+    \item Impractical to precompute exponentially many loop formulas
+    \end{itemize}
+    \medskip
+  \item <2-> In practice, ASP solvers such as \textit{smodels} and \textit{clasp}
+    \begin{itemize}
+    \item exploit strongly connected components of positive atom\\ dependency graphs
+      \begin{itemize}
+      \item can be viewed as an interpolation of FL
+      \end{itemize}
+    \item <3-> do not directly implement BL (and neither WFJ)
+      \begin{itemize}
+      \item probably difficult to do efficiently
+      \end{itemize}
+    \item <4-> could simulate BL via FL/WFN by means of failed-literal detection (lookahead)
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+% ----------------------------------------------------------------
+\begin{frame}{Case analysis by $\textit{Cut}$}
+  \bigskip
+  \begin{itemize}
+  \item <1-> Up to now, all tableau rules are deterministic
+  \item [] That is, rules extend a single branch but cannot create sub-branches
+    \smallskip
+  \item <2-> In general, closing a branch leads to a partial assignment
+    \smallskip
+  \item <3-> Case analysis is done by $\textit{Cut}[{\mathcal{C}}]$ where
+    ${\mathcal{C}} \subseteq \atom{P} \cup \body{P}$
+  \end{itemize}
+\end{frame}
+% ----------------------------------------------------------------
+\begin{frame}{Case analysis by $\textit{Cut}$}
+\begin{itemize}
+\item \structure{Prerequisites} None
+\item \structure{Consequence} Two alternative (complementary) entries
+\item \structure{Tableau Rule} \textnormal{$\textit{Cut}[\mathcal{C}]$}~\\[-5mm]
+\[
+\begin{array}{cl}
+&
+\raisebox{-8pt}[0pt][0pt]{($v \in {\mathcal{C}}$)}
+\\\cline{1-1}
+\Tsigned{v} \;\; \mid \;\; \Fsigned{v}
+\end{array}
+\]
+\item<2-> \structure{Examples}
+\[
+\begin{array}{cl}
+a \leftarrow \naf{b} \\
+b \leftarrow \naf{a} &
+\raisebox{-8pt}[0pt][0pt]{(${\mathcal{C}} = \atom{P}$)}
+\\\cline{1-1}
+\Tsigned{a} \;\; \mid \;\; \Fsigned{a}
+\\[10pt]
+a \leftarrow \naf{b} \\
+b \leftarrow \naf{a} &
+\raisebox{-8pt}[0pt][0pt]{(${\mathcal{C}} = \body{P}$)}
+\\\cline{1-1}
+\Tsigned{\{\naf{b}\}} \;\; \mid \;\; \Fsigned{\{\naf{b}\}}
+\end{array}
+\]
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Well-known tableau calculi}
+  \begin{itemize}
+  \item <1-> Fitting's operator $\mathbf{\Phi}$ applies forward propagation without sophisticated
+    unfounded set checks
+    \[
+    {\mathcal{T}}_{\mathbf{\Phi}} = \{\textit{FTB},\textit{FTA},\textit{FFB},\textit{FFA}\}
+    \]
+  \item <2-> Well-founded operator $\mathbf{\Omega}$ replaces negation of single atoms with negation
+    of unfounded sets
+    \[
+    {\mathcal{T}}_{\mathbf{\Omega}} = \{\textit{FTB},\textit{FTA},\textit{FFB},\textit{WFN}\}
+    \]
+  \item <3-> ``Local'' propagation via a program's completion can be determined by elementary
+    inferences on atoms and rule bodies
+    \[
+    {\mathcal{T}}_{\textit{completion}} =
+    \{\textit{FTB},\textit{FTA},\textit{FFB},\textit{FFA},\textit{BTB},\textit{BTA},\textit{BFB},\textit{BFA}\}
+    \]
+  \end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\section{Tableau Calculi characterizing ASP solvers}
+%----------------------------------------------------------------
+\begin{frame}{Tableau calculi characterizing ASP solvers}
+  \begin{itemize}
+  \item <1-> ASP solvers combine propagation with case analysis
+  \item <2-> We obtain the following tableau calculi characterizing
+    \begin{eqnarray*}
+      {\mathcal{T}}_{\textit{cmodels-1}}
+      & = &
+      {\mathcal{T}}_{\textit{completion}} \cup \{\textit{Cut}[\atom{P} \cup \body{P}]\} \\
+      {\mathcal{T}}_{\textit{assat}}
+      & = &
+      {\mathcal{T}}_{\textit{completion}} \cup \{\textit{FL}\} \cup \{\textit{Cut}[\atom{P} \cup \body{P}]\}  \\
+      {\mathcal{T}}_{\textit{smodels}}
+      & = &
+      {\mathcal{T}}_{\textit{completion}} \cup \{\textit{WFN}\}\cup \{\textit{Cut}[\atom{P}]\} \\
+      {\mathcal{T}}_{\textit{noMoRe}}
+      & = &
+      {\mathcal{T}}_{\textit{completion}} \cup \{\textit{WFN}\}\cup \{\textit{Cut}[\body{P}]\} \\
+      {\mathcal{T}}_{\textit{nomore}^{++}}
+      & = &
+      {\mathcal{T}}_{\textit{completion}} \cup \{\textit{WFN}\}\cup \{\textit{Cut}[\atom{P} \cup \body{P}]\}
+    \end{eqnarray*}
+  \item<3-> SAT-based ASP solvers,
+        \textit{assat} and \textit{cmodels},\\
+        incrementally add loop formulas to a program's completion
+  \item<4->  Native ASP solvers,
+        \textit{smodels}, \textit{dlv}, \textit{noMoRe}, and \textit{nomore++},
+        essentially differ only in their $\textit{Cut}$ rules
+  \end{itemize}
+\end{frame}
+%------------------------------------------------------------
+\section{Proof complexity}
+%----------------------------------------------------------------
+\begin{frame}{Proof complexity}
+  \begin{itemize}
+  \item<1-> \alert{Proof complexity} is used for describing the relative efficiency of different proof systems
+    \begin{itemize}
+    \item<2-> [] It compares proof systems based on \alert{minimal refutations}
+    \item<2-> [] It is independent of heuristics
+    \end{itemize}
+  \item<3-> A proof system ${\mathcal{T}}$ \alert{polynomially simulates} a proof system ${\mathcal{T}}'$,
+    if every refutation of ${\mathcal{T}}'$ can be polynomially mapped to a refutation of ${\mathcal{T}}$
+  \item<3-> [] Otherwise, ${\mathcal{T}}$ does not polynomially simulate ${\mathcal{T}}'$
+  \item<4-> For showing that proof system ${\mathcal{T}}$ does not polynomially simulate ${\mathcal{T}}'$,
+    we have to provide an infinite \alert{witnessing family} of programs such that minimal
+    refutations of ${\mathcal{T}}$ asymptotically are exponentially larger than minimal refutations of ${\mathcal{T}}'$
+  \item<4-> [] The size of tableaux is simply the number of their entries
+  \item<5-> We do not need to know the precise number of entries:\\
+    \alert{Counting required $\textit{Cut}$ applications is sufficient !}
+  \end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{${\mathcal{T}}_{\textit{smodels}}$ versus ${\mathcal{T}}_{\textit{noMoRe}}$}
+  \begin{itemize}
+  \item<1-> \alert<8>{${\mathcal{T}}_{\textit{smodels}}$} restricts $\textit{Cut}$ to $\atom{P}$ and \alert<7>{${\mathcal{T}}_{\textit{noMoRe}}$} to $\body{P}$
+
+    \alert<1>{\em Are both approaches similar or is one of them superior to the other?}
+    \medskip
+  \item<2-> Let $\{P^n_a\}$, $\{P^n_b\}$, and $\{P^n_c\}$ be infinite families of programs where
+    \[\scriptsize\hspace{-3pt}
+    \alert<3-4>{P^n_a} =
+    \left\{
+      \begin{array}{@{\,}l@{\,}}
+        x \leftarrow \naf{x}      \\
+        x \leftarrow a_1, b_1     \\
+        \multicolumn{1}{c}{\vdots}\\
+        x \leftarrow a_n, b_n
+      \end{array}
+    \right\}
+    \
+    \alert<5-6>{P^n_b} =
+    \left\{
+      \begin{array}{@{\,}l@{\ }c@{\ }r@{\,}}
+        \multicolumn{3}{@{\,}l@{\,}}{x \leftarrow c_1,\dots,c_n,\naf{x}}   \\
+        c_1 \leftarrow a_1                                                 &&
+        c_1 \leftarrow b_1                                                 \\
+        \multicolumn{1}{c}{\vdots}                                         &&
+        \multicolumn{1}{c}{\vdots}                                         \\
+        c_n \leftarrow a_n                                                 &&
+        c_n \leftarrow b_n
+      \end{array}
+    \right\}
+    \
+    \alert<3-4,5-6>{P_c^n} =
+    \left\{
+      \begin{array}{@{\,}l@{\,}}
+        a_1 \leftarrow \naf{b}_1  \\
+        b_1 \leftarrow \naf{a}_1  \\
+        \multicolumn{1}{c}{\vdots}\\
+        a_n \leftarrow \naf{b}_n  \\
+        b_n \leftarrow \naf{a}_n
+      \end{array}
+    \right\}
+    \]
+  \item <3->
+    In \alert<3>{minimal refutations} for \alert<3>{$P^n_a\cup P^n_c$},
+    \pause[4]
+    the number of applications of
+    \textcolor<4,7>{green}{$\textit{Cut}[\body{P^n_a\cup P^n_c}]$} with
+    \textcolor<4>{green}{${\mathcal{T}}_{\textit{noMoRe}}$} is
+    \textcolor<4,7>{green}{linear} in $n$,
+    whereas
+    \textcolor<4>{red}{${\mathcal{T}}_{\textit{smodels}}$} requires
+    \textcolor<4,8>{red}{exponential}ly many applications of
+    \textcolor<4,8>{red}{$\textit{Cut}[\atom{P^n_a\cup P^n_c}]$}
+  \item <5-> Vice versa, \alert<5>{minimal refutations} for \alert<5>{$P^n_b\cup P^n_c$}
+    \pause[6]
+    require
+    \textcolor<6,8>{green}{linear}ly many applications of
+    \textcolor<6,8>{green}{$\textit{Cut}[\atom{P^n_b\cup P^n_c}]$} with
+    \textcolor<6>{green}{${\mathcal{T}}_{\textit{smodels}}$}
+    and
+    \textcolor<6,7>{red}{exponential}ly many applications of
+    \textcolor<6,7>{red}{$\textit{Cut}[\body{P^n_b\cup P^n_c}]$} with
+    \textcolor<6>{red}{${\mathcal{T}}_{\textit{noMoRe}}$}
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Relative efficiency}
+  \begin{itemize}
+  \item<1-> As witnessed by $\{P^n_a\cup P^n_c\}$ and $\{P^n_b\cup P^n_c\}$, respectively, \\
+    ${\mathcal{T}}_{\textit{smodels}}$ and ${\mathcal{T}}_{\textit{noMoRe}}$ do not polynomially
+    simulate one another
+  \item<2-> Any refutation of ${\mathcal{T}}_{\textit{smodels}}$ or
+    ${\mathcal{T}}_{\textit{noMoRe}}$ is a refutation of ${\mathcal{T}}_{\textit{nomore}^{++}}$ \\
+    (but not vice versa)
+  \item<3-> Hence
+    \begin{itemize}
+    \item both ${\mathcal{T}}_{\textit{smodels}}$ and ${\mathcal{T}}_{\textit{noMoRe}}$
+      are polynomially simulated by ${\mathcal{T}}_{\textit{nomore}^{++}}$ and
+    \item ${\mathcal{T}}_{\textit{nomore}^{++}}$ is polynomially simulated
+      by neither ${\mathcal{T}}_{\textit{smodels}}$ nor ${\mathcal{T}}_{\textit{noMoRe}}$
+    \end{itemize}
+     \bigskip
+  \item<4-> More generally,
+    the proof system obtained with $\textit{Cut}[\atom{P}\cup\body{P}]$ is \alert{exponentially stronger} than
+    \\
+    the ones with either $\textit{Cut}[\atom{P}]$ or $\textit{Cut}[\body{P}]$
+  \item<5-> Case analyses (at least) on atoms and bodies are mandatory in powerful ASP solvers
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+% \begin{frame}{$\mathcal{T}_{\textit{cmodels}\mathrm{{-}1}}$: Example tableau}
+% %
+% \hfill
+% \begin{minipage}[t]{12cm}
+% \scriptsize
+% \[
+% \begin{array}{llllllllllll}
+% (r_1)  &  a \leftarrow \naf{b}                  & & &
+% (r_2)  &  b \leftarrow d, \naf{a}               & & &
+% (r_3)  &  c \leftarrow b, d                            \\[-1mm]
+% (r_4)  &  c \leftarrow g                               & & &
+% (r_5)  &  d \leftarrow c                               & & &
+% (r_6)  &  d \leftarrow g                               \\[-1mm]
+% (r_7)  &  e \leftarrow f, \naf{c}               & & &
+% (r_8)  &  f \leftarrow \naf{g}                  & & &
+% (r_9)  &  g \leftarrow \naf{a}, \naf{f}
+% \end{array}
+% \]
+% \vspace{-0.7cm}
+% \end{minipage}
+% %
+% \begin{minipage}[t]{16cm}
+% \tiny
+% %
+% \begin{minipage}[t]{4.5cm}
+% \[
+% \ifpdf
+% \hspace{-0.3cm}
+% \else
+% \hspace{-0.5cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(1)}                                       &
+%   \Tsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(2)}                                       &
+%   \Tsigned{\{\naf{b}\}}                     &
+%   [\textit{BTA}{:}\; r_1, \text{1}]                \\
+% \textbf{(3)}                                       &
+%   \Fsigned{b}                                      &
+%   [\textit{BTB}{:}\; \text{2}]                     \\
+% \textbf{(4)}                                       &
+%   \Fsigned{\{d,\naf{a}\}}                   &
+%   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+% \textbf{(5)}                                       &
+%   \Fsigned{\{\naf{a},\naf{f}\}}      &
+%   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
+% \textbf{(6)}                                       &
+%   \Fsigned{g}                                      &
+%   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+% \textbf{(7)}                                       &
+%   \Tsigned{\{\naf{g}\}}                     &
+%   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+% \textbf{(8)}                                       &
+%   \Tsigned{f}                                      &
+%   [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+% \textbf{(9)}                                       &
+%   \Fsigned{\{b,d\}}                                &
+%   [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+% \textbf{(10)}                                      &
+%   \Fsigned{\{g\}}                                  &
+%   [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+% \textbf{(11)}                                      &
+%   \Fsigned{c}                                      &
+%   [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+% \textbf{(12)}                                      &
+%   \Fsigned{\{c\}}                                  &
+%   [\textit{FFB}{:}\;r_5, \text{11}]                \\
+% \textbf{(13)}                                      &
+%   \Fsigned{d}                                      &
+%   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+% \textbf{(14)}                                      &
+%   \Tsigned{\{f,\naf{c}\}}                   &
+%   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+% \textbf{(15)}                                      &
+%   \Tsigned{e}                                      &
+%   [\textit{FTA}{:}\;r_7, \text{14}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% % \hfill
+% %
+% \begin{minipage}[t]{6cm}
+% \[
+% \hspace{2.5cm}
+% \begin{array}{lcl}
+% \textbf{(16)}                                      &
+%   \Fsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(17)}                                      &
+%   \Fsigned{\{\naf{b}\}}                     &
+%   [\textit{BFA}{:}\; r_1, \text{16}]               \\
+% \textbf{(18)}                                      &
+%   \Tsigned{b}                                      &
+%   [\textit{BFB}{:}\; \text{17}]                    \\
+% \textbf{(19)}                                      &
+%   \Tsigned{\{d,\naf{a}\}}                   &
+%   [\textit{BTA}{:}\;r_2, \text{18}]                \\
+% \textbf{(20)}                                      &
+%   \Tsigned{d}                                      &
+%   [\textit{BTB}{:}\;\text{19}]                     \\
+% \textbf{(21)}                                      &
+%   \Tsigned{\{b,d\}}                                &
+%   [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+% \textbf{(22)}                                      &
+%   \Tsigned{c}                                      &
+%   [\textit{FTA}{:}\;r_3, \text{21}]                \\
+% \textbf{(23)}                                      &
+%   \Fsigned{\{f,\naf{c}\}}                   &
+%   [\textit{FFB}{:}\;r_7, \text{22}]                \\
+% \textbf{(24)}                                      &
+%   \Fsigned{e}                                      &
+%   [\textit{FFA}{:}\;r_7, \text{23}]                \\
+% \textbf{(25)}                                      &
+%   \Tsigned{\{c\}}                                  &
+%   [\textit{FTB}{:}\;r_5, \text{22}]
+% \vspace{-0.7cm}
+% \end{array}
+% \]
+% %
+% \begin{minipage}[t]{1cm}
+% \[
+% \ifpdf
+% \hspace{0.25cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(26)}                                      &
+%   \Tsigned{f}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(27)}                                      & \hspace{-0.1cm}
+%   \Fsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+%   [\textit{FFB}{:}\;r_9, \text{26}]                \\
+% \textbf{(28)}                                      &
+%   \Fsigned{g}                                      &
+%   [\textit{FFA}{:}\;r_9, \text{27}]                \\
+% \textbf{(29)}                                      &
+%   \Fsigned{\{g\}}                                  &
+%   [\textit{FFB}{:}\;r_4, r_6, \text{28}]            \\
+% \textbf{(30)}                                      &
+%   \Tsigned{\{\naf{g}\}}                     &
+%   [\textit{FTB}{:}\;r_8, \text{28}]                %\\
+% %\textbf{(31)}                                      &
+% %  \Fsigned{c}                                      &
+% %  [\textit{FL}{:}\;\{c,d\}, \text{29}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% \begin{minipage}[t]{2cm}
+% \[
+% \ifpdf
+% \hspace{3.75cm}
+% \else
+% \hspace{3.5cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(31)}                                      &
+%   \Fsigned{f}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(32)}                                      & \hspace{-0.1cm}
+%   \Tsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+%   [\textit{FTB}{:}\;r_9, \text{16}, \text{31}]     \\
+% \textbf{(33)}                                      &
+%   \Tsigned{g}                                      &
+%   [\textit{FTA}{:}\;r_9, \text{32}]                \\
+% \textbf{(34)}                                      &
+%   \Tsigned{\{g\}}                                  &
+%   [\textit{FTB}{:}\;r_4, r_6, \text{33}]           \\
+% \textbf{(35)}                                      &
+%   \Fsigned{\{\naf{g}\}}                     &
+%   [\textit{FFB}{:}\;r_8, \text{33}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% \end{minipage}
+% %
+% \end{minipage}
+% \hfill
+% %
+% \end{frame}
+%----------------------------------------------------------------
+% \begin{frame}{$\mathcal{T}_{\textit{assat}}$: Example tableau}
+% %
+% \hfill
+% \begin{minipage}[t]{12cm}
+% \scriptsize
+% \[
+% \begin{array}{llllllllllll}
+% (r_1)  &  a \leftarrow \naf{b}                  & & &
+% (r_2)  &  b \leftarrow d, \naf{a}               & & &
+% (r_3)  &  c \leftarrow b, d                            \\[-1mm]
+% (r_4)  &  c \leftarrow g                               & & &
+% (r_5)  &  d \leftarrow c                               & & &
+% (r_6)  &  d \leftarrow g                               \\[-1mm]
+% (r_7)  &  e \leftarrow f, \naf{c}               & & &
+% (r_8)  &  f \leftarrow \naf{g}                  & & &
+% (r_9)  &  g \leftarrow \naf{a}, \naf{f}
+% \end{array}
+% \]
+% \vspace{-0.7cm}
+% \end{minipage}
+% %
+% \begin{minipage}[t]{16cm}
+% \tiny
+% %
+% \begin{minipage}[t]{4.5cm}
+% \[
+% \ifpdf
+% \hspace{-0.3cm}
+% \else
+% \hspace{-0.5cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(1)}                                       &
+%   \Tsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(2)}                                       &
+%   \Tsigned{\{\naf{b}\}}                     &
+%   [\textit{BTA}{:}\; r_1, \text{1}]                \\
+% \textbf{(3)}                                       &
+%   \Fsigned{b}                                      &
+%   [\textit{BTB}{:}\; \text{2}]                     \\
+% \textbf{(4)}                                       &
+%   \Fsigned{\{d,\naf{a}\}}                   &
+%   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+% \textbf{(5)}                                       &
+%   \Fsigned{\{\naf{a},\naf{f}\}}      &
+%   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
+% \textbf{(6)}                                       &
+%   \Fsigned{g}                                      &
+%   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+% \textbf{(7)}                                       &
+%   \Tsigned{\{\naf{g}\}}                     &
+%   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+% \textbf{(8)}                                       &
+%   \Tsigned{f}                                      &
+%   [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+% \textbf{(9)}                                       &
+%   \Fsigned{\{b,d\}}                                &
+%   [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+% \textbf{(10)}                                      &
+%   \Fsigned{\{g\}}                                  &
+%   [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+% \textbf{(11)}                                      &
+%   \Fsigned{c}                                      &
+%   [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+% \textbf{(12)}                                      &
+%   \Fsigned{\{c\}}                                  &
+%   [\textit{FFB}{:}\;r_5, \text{11}]                \\
+% \textbf{(13)}                                      &
+%   \Fsigned{d}                                      &
+%   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+% \textbf{(14)}                                      &
+%   \Tsigned{\{f,\naf{c}\}}                   &
+%   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+% \textbf{(15)}                                      &
+%   \Tsigned{e}                                      &
+%   [\textit{FTA}{:}\;r_7, \text{14}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% % \hfill
+% %
+% \begin{minipage}[t]{6cm}
+% \[
+% \hspace{2.5cm}
+% \begin{array}{lcl}
+% \textbf{(16)}                                      &
+%   \Fsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(17)}                                      &
+%   \Fsigned{\{\naf{b}\}}                     &
+%   [\textit{BFA}{:}\; r_1, \text{16}]               \\
+% \textbf{(18)}                                      &
+%   \Tsigned{b}                                      &
+%   [\textit{BFB}{:}\; \text{17}]                    \\
+% \textbf{(19)}                                      &
+%   \Tsigned{\{d,\naf{a}\}}                   &
+%   [\textit{BTA}{:}\;r_2, \text{18}]                \\
+% \textbf{(20)}                                      &
+%   \Tsigned{d}                                      &
+%   [\textit{BTB}{:}\;\text{19}]                     \\
+% \textbf{(21)}                                      &
+%   \Tsigned{\{b,d\}}                                &
+%   [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+% \textbf{(22)}                                      &
+%   \Tsigned{c}                                      &
+%   [\textit{FTA}{:}\;r_3, \text{21}]                \\
+% \textbf{(23)}                                      &
+%   \Fsigned{\{f,\naf{c}\}}                   &
+%   [\textit{FFB}{:}\;r_7, \text{22}]                \\
+% \textbf{(24)}                                      &
+%   \Fsigned{e}                                      &
+%   [\textit{FFA}{:}\;r_7, \text{23}]                \\
+% \textbf{(25)}                                      &
+%   \Tsigned{\{c\}}                                  &
+%   [\textit{FTB}{:}\;r_5, \text{22}]
+% \vspace{-0.7cm}
+% \end{array}
+% \]
+% %
+% \begin{minipage}[t]{1cm}
+% \[
+% \ifpdf
+% \hspace{0.25cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(26)}                                      &
+%   \Tsigned{f}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(27)}                                      & \hspace{-0.1cm}
+%   \Fsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+%   [\textit{FFB}{:}\;r_9, \text{26}]                \\
+% \textbf{(28)}                                      &
+%   \Fsigned{g}                                      &
+%   [\textit{FFA}{:}\;r_9, \text{27}]                \\
+% \textbf{(29)}                                      &
+%   \Fsigned{\{g\}}                                  &
+%   [\textit{FFB}{:}\;r_4, r_6, \text{28}]            \\
+% \textbf{(30)}                                      &
+%   \Tsigned{\{\naf{g}\}}                     &
+%   [\textit{FTB}{:}\;r_8, \text{28}]                \\
+% \textbf{(31)}                                      &
+%   \Fsigned{c}                                      &
+%   [\textit{FL}{:}\;\{c,d\}, \text{29}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% \begin{minipage}[t]{2cm}
+% \[
+% \ifpdf
+% \hspace{3.75cm}
+% \else
+% \hspace{3.5cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(32)}                                      &
+%   \Fsigned{f}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(33)}                                      & \hspace{-0.1cm}
+%   \Tsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+%   [\textit{FTB}{:}\;r_9, \text{16}, \text{32}]     \\
+% \textbf{(34)}                                      &
+%   \Tsigned{g}                                      &
+%   [\textit{FTA}{:}\;r_9, \text{33}]                \\
+% \textbf{(35)}                                      &
+%   \Tsigned{\{g\}}                                  &
+%   [\textit{FTB}{:}\;r_4, r_6, \text{34}]           \\
+% \textbf{(36)}                                      &
+%   \Fsigned{\{\naf{g}\}}                     &
+%   [\textit{FFB}{:}\;r_8, \text{34}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% \end{minipage}
+% %
+% \end{minipage}
+% \hfill
+% %
+% \end{frame}
+%----------------------------------------------------------------
+\begin{frame}{$\mathcal{T}_{\textit{smodels}}$: Example tableau}
+\small
+\[
+\begin{array}{llllllllllll}
+(r_1)  &  a \leftarrow \naf{b}                  & & &
+(r_2)  &  b \leftarrow d, \naf{a}               & & &
+(r_3)  &  c \leftarrow b, d                            \\
+(r_4)  &  c \leftarrow g                               & & &
+(r_5)  &  d \leftarrow c                               & & &
+(r_6)  &  d \leftarrow g                               \\
+(r_7)  &  e \leftarrow f, \naf{c}               & & &
+(r_8)  &  f \leftarrow \naf{g}                  & & &
+(r_9)  &  g \leftarrow \naf{a}, \naf{f}
+\end{array}
+\]
+\begin{center}
+\hspace*{-15pt}
+\begin{minipage}[t]{16cm}
+\tiny
+\begin{minipage}[t]{4.5cm}
+\[
+\hspace{-0.2cm}
+\begin{array}{lcl}
+\textbf{(1)}                                       &
+  \Tsigned{a}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(2)}                                       &
+  \Tsigned{\{\naf{b}\}}                     &
+  [\textit{BTA}{:}\; r_1, \text{1}]                \\
+\textbf{(3)}                                       &
+  \Fsigned{b}                                      &
+  [\textit{BTB}{:}\; \text{2}]                     \\
+\textbf{(4)}                                       &
+  \Fsigned{\{d,\naf{a}\}}                   &
+  [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+\textbf{(5)}                                       &
+  \Fsigned{\{\naf{a},\naf{f}\}}      &
+  [\textit{FFB}{:}\;r_9, \text{1}]                 \\
+\textbf{(6)}                                       &
+  \Fsigned{g}                                      &
+  [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+\textbf{(7)}                                       &
+  \Tsigned{\{\naf{g}\}}                     &
+  [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+\textbf{(8)}                                       &
+  \Tsigned{f}                                      &
+  [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+\textbf{(9)}                                       &
+  \Fsigned{\{b,d\}}                                &
+  [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+\textbf{(10)}                                      &
+  \Fsigned{\{g\}}                                  &
+  [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+\textbf{(11)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+\textbf{(12)}                                      &
+  \Fsigned{\{c\}}                                  &
+  [\textit{FFB}{:}\;r_5, \text{11}]                \\
+\textbf{(13)}                                      &
+  \Fsigned{d}                                      &
+  [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+\textbf{(14)}                                      &
+  \Tsigned{\{f,\naf{c}\}}                   &
+  [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+\textbf{(15)}                                      &
+  \Tsigned{e}                                      &
+  [\textit{FTA}{:}\;r_7, \text{14}]
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{6cm}
+\[
+\hspace{2.2cm}
+\begin{array}{lcl}
+\textbf{(16)}                                      &
+  \Fsigned{a}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(17)}                                      &
+  \Fsigned{\{\naf{b}\}}                     &
+  [\textit{BFA}{:}\; r_1, \text{16}]               \\
+\textbf{(18)}                                      &
+  \Tsigned{b}                                      &
+  [\textit{BFB}{:}\; \text{17}]                    \\
+\textbf{(19)}                                      &
+  \Tsigned{\{d,\naf{a}\}}                   &
+  [\textit{BTA}{:}\;r_2, \text{18}]                \\
+\textbf{(20)}                                      &
+  \Tsigned{d}                                      &
+  [\textit{BTB}{:}\;\text{19}]                     \\
+\textbf{(21)}                                      &
+  \Tsigned{\{b,d\}}                                &
+  [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+\textbf{(22)}                                      &
+  \Tsigned{c}                                      &
+  [\textit{FTA}{:}\;r_3, \text{21}]                \\
+\textbf{(23)}                                      &
+  \Fsigned{\{f,\naf{c}\}}                   &
+  [\textit{FFB}{:}\;r_7, \text{22}]                \\
+\textbf{(24)}                                      &
+  \Fsigned{e}                                      &
+  [\textit{FFA}{:}\;r_7, \text{23}]                \\
+\textbf{(25)}                                      &
+  \Tsigned{\{c\}}                                  &
+  [\textit{FTB}{:}\;r_5, \text{22}]
+\vspace{-0.7cm}
+\end{array}
+\]
+%
+\begin{minipage}[t]{1cm}
+\[
+\hspace{0.25cm}
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(26)}                                      &
+  \Tsigned{f}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(27)}                                      & \hspace{-0.1cm}
+  \Fsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+  [\textit{FFB}{:}\;r_9, \text{26}]                \\
+\textbf{(28)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{WFN}{:}\;\text{27}]
+\end{array}
+\]
+\end{minipage}
+%
+\begin{minipage}[t]{2cm}
+\[
+\hspace{2.75cm}
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(29)}                                      &
+  \Fsigned{f}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(30)}                                      & \hspace{-0.1cm}
+  \Tsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+  [\textit{FTB}{:}\;r_9, \text{16}, \text{29}]     \\
+\textbf{(31)}                                      &
+  \Tsigned{g}                                      &
+  [\textit{FTA}{:}\;r_9, \text{30}]                \\
+\textbf{(32)}                                      &
+  \Tsigned{\{g\}}                                  &
+  [\textit{FTB}{:}\;r_4, r_6, \text{31}]           \\
+\textbf{(33)}                                      &
+  \Fsigned{\{\naf{g}\}}                     &
+  [\textit{FFB}{:}\;r_8, \text{31}]
+\end{array}
+\]
+\end{minipage}
+\end{minipage}
+\end{minipage}
+\end{center}
+\bigskip
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{$\mathcal{T}_{\textit{noMoRe}}$: Example tableau}
+\small
+\[
+\begin{array}{llllllllllll}
+(r_1)  &  a \leftarrow \naf{b}                  & & &
+(r_2)  &  b \leftarrow d, \naf{a}               & & &
+(r_3)  &  c \leftarrow b, d                            \\
+(r_4)  &  c \leftarrow g                               & & &
+(r_5)  &  d \leftarrow c                               & & &
+(r_6)  &  d \leftarrow g                               \\
+(r_7)  &  e \leftarrow f, \naf{c}               & & &
+(r_8)  &  f \leftarrow \naf{g}                  & & &
+(r_9)  &  g \leftarrow \naf{a}, \naf{f}
+\end{array}
+\]
+\begin{center}
+\hspace*{-15pt}
+\begin{minipage}[t]{16cm}
+\tiny
+\begin{minipage}[t]{4.5cm}
+\[
+\hspace{-0.2cm}
+\begin{array}{lcl}
+\textbf{(1)}                                       &
+  \Tsigned{\{\naf{b}\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(2)}                                       &
+  \Tsigned{a}                                      &
+  [\textit{FTA}{:}\; r_1, \text{1}]                \\
+\textbf{(3)}                                       &
+  \Fsigned{b}                                      &
+  [\textit{BTB}{:}\; \text{1}]                     \\
+\textbf{(4)}                                       &
+  \Fsigned{\{d,\naf{a}\}}                   &
+  [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+\textbf{(5)}                                       &
+  \Fsigned{\{\naf{a},\naf{f}\}}      &
+  [\textit{FFB}{:}\;r_9, \text{2}]                 \\
+\textbf{(6)}                                       &
+  \Fsigned{g}                                      &
+  [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+\textbf{(7)}                                       &
+  \Tsigned{\{\naf{g}\}}                     &
+  [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+\textbf{(8)}                                       &
+  \Tsigned{f}                                      &
+  [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+\textbf{(9)}                                       &
+  \Fsigned{\{b,d\}}                                &
+  [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+\textbf{(10)}                                      &
+  \Fsigned{\{g\}}                                  &
+  [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+\textbf{(11)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+\textbf{(12)}                                      &
+  \Fsigned{\{c\}}                                  &
+  [\textit{FFB}{:}\;r_5, \text{11}]                \\
+\textbf{(13)}                                      &
+  \Fsigned{d}                                      &
+  [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+\textbf{(14)}                                      &
+  \Tsigned{\{f,\naf{c}\}}                   &
+  [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+\textbf{(15)}                                      &
+  \Tsigned{e}                                      &
+  [\textit{FTA}{:}\;r_7, \text{14}]
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{6cm}
+\[
+\hspace{2.2cm}
+\begin{array}{lcl}
+\textbf{(16)}                                      &
+  \Fsigned{\{\naf{b}\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(17)}                                      &
+  \Fsigned{a}                                      &
+  [\textit{FFA}{:}\; r_1, \text{16}]               \\
+\textbf{(18)}                                      &
+  \Tsigned{b}                                      &
+  [\textit{BFB}{:}\; \text{16}]                    \\
+\textbf{(19)}                                      &
+  \Tsigned{\{d,\naf{a}\}}                   &
+  [\textit{BTA}{:}\;r_2, \text{18}]                \\
+\textbf{(20)}                                      &
+  \Tsigned{d}                                      &
+  [\textit{BTB}{:}\;\text{19}]                     \\
+\textbf{(21)}                                      &
+  \Tsigned{\{b,d\}}                                &
+  [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+\textbf{(22)}                                      &
+  \Tsigned{c}                                      &
+  [\textit{FTA}{:}\;r_3, \text{21}]                \\
+\textbf{(23)}                                      &
+  \Fsigned{\{f,\naf{c}\}}                   &
+  [\textit{FFB}{:}\;r_7, \text{22}]                \\
+\textbf{(24)}                                      &
+  \Fsigned{e}                                      &
+  [\textit{FFA}{:}\;r_7, \text{23}]                \\
+\textbf{(25)}                                      &
+  \Tsigned{\{c\}}                                  &
+  [\textit{FTB}{:}\;r_5, \text{22}]
+\vspace{-0.7cm}
+\end{array}
+\]
+\begin{minipage}[t]{1cm}
+\[
+\hspace{0.25cm}
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(26)}                                      &
+  \Tsigned{\{\naf{g}\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(27)}                                      &
+  \Fsigned{g}                                      &
+  [\textit{BTB}{:}\;\text{26}]                     \\
+\textbf{(28)}                                      & \hspace{-0.1cm}
+  \Fsigned{\{g\}}                                  \hspace{-0.1cm} &
+  [\textit{FFB}{:}\;r_4, r_6, \text{27}]           \\
+\textbf{(29)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{WFN}{:}\;\text{28}]
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{2cm}
+\[
+\hspace{2.75cm}
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(30)}                                      &
+  \Fsigned{\{\naf{g}\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(31)}                                      &
+  \Tsigned{g}                                      &
+  [\textit{BFB}{:}\;\text{30}]                     \\
+\textbf{(32)}                                      &
+  \Tsigned{\{g\}}                                  &
+  [\textit{FTB}{:}\;r_4, r_6, \text{31}]           \\
+\textbf{(33)}                                      &
+  \Fsigned{f}                                      &
+  [\textit{FFA}{:}\;r_8, \text{30}]                \\
+\textbf{(34)}                                      & \hspace{-0.1cm}
+  \Tsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+  [\textit{FTB}{:}\;r_9, \text{17}, \text{33}]
+\end{array}
+\]
+\end{minipage}
+\end{minipage}
+\end{minipage}
+\end{center}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{$\mathcal{T}_{\textit{nomore}^{++}}$: Example tableau}
+\small
+\[
+\begin{array}{llllllllllll}
+(r_1)  &  a \leftarrow \naf{b}                  & & &
+(r_2)  &  b \leftarrow d, \naf{a}               & & &
+(r_3)  &  c \leftarrow b, d                            \\
+(r_4)  &  c \leftarrow g                               & & &
+(r_5)  &  d \leftarrow c                               & & &
+(r_6)  &  d \leftarrow g                               \\
+(r_7)  &  e \leftarrow f, \naf{c}               & & &
+(r_8)  &  f \leftarrow \naf{g}                  & & &
+(r_9)  &  g \leftarrow \naf{a}, \naf{f}
+\end{array}
+\]
+\begin{center}
+\hspace*{-15pt}
+\begin{minipage}[t]{16cm}
+\tiny
+\begin{minipage}[t]{4.5cm}
+\[
+\hspace{-0.2cm}
+\begin{array}{lcl}
+\textbf{(1)}                                       &
+  \Tsigned{a}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(2)}                                       &
+  \Tsigned{\{\naf{b}\}}                     &
+  [\textit{BTA}{:}\; r_1, \text{1}]                \\
+\textbf{(3)}                                       &
+  \Fsigned{b}                                      &
+  [\textit{BTB}{:}\; \text{2}]                     \\
+\textbf{(4)}                                       &
+  \Fsigned{\{d,\naf{a}\}}                   &
+  [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+\textbf{(5)}                                       &
+  \Fsigned{\{\naf{a},\naf{f}\}}      &
+  [\textit{FFB}{:}\;r_9, \text{1}]                 \\
+\textbf{(6)}                                       &
+  \Fsigned{g}                                      &
+  [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+\textbf{(7)}                                       &
+  \Tsigned{\{\naf{g}\}}                     &
+  [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+\textbf{(8)}                                       &
+  \Tsigned{f}                                      &
+  [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+\textbf{(9)}                                       &
+  \Fsigned{\{b,d\}}                                &
+  [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+\textbf{(10)}                                      &
+  \Fsigned{\{g\}}                                  &
+  [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+\textbf{(11)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+\textbf{(12)}                                      &
+  \Fsigned{\{c\}}                                  &
+  [\textit{FFB}{:}\;r_5, \text{11}]                \\
+\textbf{(13)}                                      &
+  \Fsigned{d}                                      &
+  [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+\textbf{(14)}                                      &
+  \Tsigned{\{f,\naf{c}\}}                   &
+  [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+\textbf{(15)}                                      &
+  \Tsigned{e}                                      &
+  [\textit{FTA}{:}\;r_7, \text{14}]
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{6cm}
+\[
+\hspace{2.2cm}
+\begin{array}{lcl}
+\textbf{(16)}                                      &
+  \Fsigned{a}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(17)}                                      &
+  \Fsigned{\{\naf{b}\}}                     &
+  [\textit{BFA}{:}\; r_1, \text{16}]               \\
+\textbf{(18)}                                      &
+  \Tsigned{b}                                      &
+  [\textit{BFB}{:}\; \text{17}]                    \\
+\textbf{(19)}                                      &
+  \Tsigned{\{d,\naf{a}\}}                   &
+  [\textit{BTA}{:}\;r_2, \text{18}]                \\
+\textbf{(20)}                                      &
+  \Tsigned{d}                                      &
+  [\textit{BTB}{:}\;\text{19}]                     \\
+\textbf{(21)}                                      &
+  \Tsigned{\{b,d\}}                                &
+  [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+\textbf{(22)}                                      &
+  \Tsigned{c}                                      &
+  [\textit{FTA}{:}\;r_3, \text{21}]                \\
+\textbf{(23)}                                      &
+  \Fsigned{\{f,\naf{c}\}}                   &
+  [\textit{FFB}{:}\;r_7, \text{22}]                \\
+\textbf{(24)}                                      &
+  \Fsigned{e}                                      &
+  [\textit{FFA}{:}\;r_7, \text{23}]                \\
+\textbf{(25)}                                      &
+  \Tsigned{\{c\}}                                  &
+  [\textit{FTB}{:}\;r_5, \text{22}]
+\vspace{-0.7cm}
+\end{array}
+\]
+%
+\begin{minipage}[t]{1cm}
+\[
+%\ifpdf
+\hspace{0.25cm}
+%\fi
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(26)}                                      &
+  \Tsigned{\{\naf{g}\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(27)}                                      &
+  \Fsigned{g}                                      &
+  [\textit{BTB}{:}\;\text{26}]                     \\
+\textbf{(28)}                                      & \hspace{-0.1cm}
+  \Fsigned{\{g\}}                                  \hspace{-0.1cm} &
+  [\textit{FFB}{:}\;r_4, r_6, \text{27}]           \\
+\textbf{(29)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{WFN}{:}\;\text{28}]
+\end{array}
+\]
+\end{minipage}
+%
+\begin{minipage}[t]{2cm}
+\[
+%\ifpdf
+\hspace{2.75cm}
+%\else
+%\hspace{3.5cm}
+%\fi
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(30)}                                      &
+  \Fsigned{\{\naf{g}\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(31)}                                      &
+  \Tsigned{g}                                      &
+  [\textit{BFB}{:}\;\text{30}]                     \\
+\textbf{(32)}                                      &
+  \Tsigned{\{g\}}                                  &
+  [\textit{FTB}{:}\;r_4, r_6, \text{31}]           \\
+\textbf{(33)}                                      &
+  \Fsigned{f}                                      &
+  [\textit{FFA}{:}\;r_8, \text{30}]                \\
+\textbf{(34)}                                      & \hspace{-0.1cm}
+  \Tsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+  [\textit{FTB}{:}\;r_9, \text{16}, \text{33}]
+\end{array}
+\]
+\end{minipage}
+\end{minipage}
+\end{minipage}
+\end{center}
+\end{frame}
+%----------------------------------------------------------------
+% \begin{frame}{$\mathcal{T}_{\textit{future}}$: Example tableau}
+% \vspace{-1.2cm}
+% %
+% \hfill
+% \begin{minipage}[t]{12cm}
+% \scriptsize
+% \[
+% \begin{array}{llllllllllll}
+% (r_1)  &  a \leftarrow \naf{b}                  & & &
+% (r_2)  &  b \leftarrow d, \naf{a}               & & &
+% (r_3)  &  c \leftarrow b, d                            \\[-1mm]
+% (r_4)  &  c \leftarrow g                               & & &
+% (r_5)  &  d \leftarrow c                               & & &
+% (r_6)  &  d \leftarrow g                               \\[-1mm]
+% (r_7)  &  e \leftarrow f, \naf{c}               & & &
+% (r_8)  &  f \leftarrow \naf{g}                  & & &
+% (r_9)  &  g \leftarrow \naf{a}, \naf{f}
+% \end{array}
+% \]
+% \vspace{-0.7cm}
+% \end{minipage}
+% %
+% \begin{minipage}[t]{16cm}
+% \scriptsize
+% %
+% \hspace{-0.5cm}
+% \begin{minipage}[t]{7cm}
+% \[
+% \begin{array}{lcl}
+% \textbf{(1)}                                       &
+%   \Tsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(2)}                                       &
+%   \Tsigned{\{\naf{b}\}}                     &
+%   [\textit{BTA}{:}\; r_1, \text{1}]                \\
+% \textbf{(3)}                                       &
+%   \Fsigned{b}                                      &
+%   [\textit{BTB}{:}\; \text{2}]                     \\
+% \textbf{(4)}                                       &
+%   \Fsigned{\{d,\naf{a}\}}                   &
+%   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+% \textbf{(5)}                                       &
+%   \Fsigned{\{\naf{a},\naf{f}\}}      &
+%   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
+% \textbf{(6)}                                       &
+%   \Fsigned{g}                                      &
+%   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+% \textbf{(7)}                                       &
+%   \Tsigned{\{\naf{g}\}}                     &
+%   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+% \textbf{(8)}                                       &
+%   \Tsigned{f}                                      &
+%   [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+% \textbf{(9)}                                       &
+%   \Fsigned{\{b,d\}}                                &
+%   [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+% \textbf{(10)}                                      &
+%   \Fsigned{\{g\}}                                  &
+%   [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+% \textbf{(11)}                                      &
+%   \Fsigned{c}                                      &
+%   [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+% \textbf{(12)}                                      &
+%   \Fsigned{\{c\}}                                  &
+%   [\textit{FFB}{:}\;r_5, \text{11}]                \\
+% \textbf{(13)}                                      &
+%   \Fsigned{d}                                      &
+%   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+% \textbf{(14)}                                      &
+%   \Tsigned{\{f,\naf{c}\}}                   &
+%   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+% \textbf{(15)}                                      &
+%   \Tsigned{e}                                      &
+%   [\textit{FTA}{:}\;r_7, \text{14}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% % \hfill
+% %
+% \hspace{-0.5cm}
+% \begin{minipage}[t]{7cm}
+% \[
+% \begin{array}{lcl}
+% \textbf{(16)}                                      &
+%   \Fsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(17)}                                      &
+%   \Fsigned{\{\naf{b}\}}                     &
+%   [\textit{BFA}{:}\; r_1, \text{16}]               \\
+% \textbf{(18)}                                      &
+%   \Tsigned{b}                                      &
+%   [\textit{BFB}{:}\; \text{17}]                    \\
+% \textbf{(19)}                                      &
+%   \Tsigned{\{d,\naf{a}\}}                   &
+%   [\textit{BTA}{:}\;r_2, \text{18}]                \\
+% \textbf{(20)}                                      &
+%   \Tsigned{d}                                      &
+%   [\textit{BTB}{:}\;\text{19}]                     \\
+% \textbf{(21)}                                      &
+%   \Tsigned{\{b,d\}}                                &
+%   [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+% \textbf{(22)}                                      &
+%   \Tsigned{c}                                      &
+%   [\textit{FTA}{:}\;r_3, \text{21}]                \\
+% \textbf{(23)}                                      &
+%   \Fsigned{\{f,\naf{c}\}}                   &
+%   [\textit{FFB}{:}\;r_7, \text{22}]                \\
+% \textbf{(24)}                                      &
+%   \Fsigned{e}                                      &
+%   [\textit{FFA}{:}\;r_7, \text{23}]                \\
+% \textbf{(25)}                                      &
+%   \Tsigned{\{c\}}                                  &
+%   [\textit{FTB}{:}\;r_5, \text{22}]                \\
+% \textbf{(26)}                                      &
+%   \Tsigned{\{g\}}                                  &
+%   [\textit{BL}{:}\;\{c,d\}, \text{20}]             \\
+% \textbf{(27)}                                      &
+%   \Tsigned{g}                                      &
+%   [\textit{BTB}{:}\;\text{26}]                     \\
+% \textbf{(28)}                                      &
+%   \Tsigned{\{\naf{a},\naf{f}\}}      &
+%   [\textit{BTA}{:}\;r_9, \text{27}]                \\
+% \textbf{(29)}                                      &
+%   \Fsigned{\{\naf{g}\}}                     &
+%   [\textit{FFB}{:}\;r_8, \text{27}]                \\
+% \textbf{(30)}                                      &
+%   \Fsigned{f}                                      &
+%   [\textit{FFA}{:}\;r_8, \text{29}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% \vspace{-2cm}
+% \end{minipage}
+% \hfill
+% %
+% \end{frame}
+%----------------------------------------------------------------
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-PDF-mode: t
+%%% TeX-master: "../asp"
+%%% End:
