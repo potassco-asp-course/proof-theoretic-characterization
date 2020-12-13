@@ -252,8 +252,8 @@ All three branches of the tableau are contradictory (cf 2, 5, 7, 8, 10)
     \left\{
       \begin{array}{l}
         a\leftarrow\\
-        c\leftarrow \naf{b}, \naf{d}\\
-        d\leftarrow a, \naf{c}
+        c\leftarrow \neg b, \neg d\\
+        d\leftarrow a, \neg c
       \end{array}
     \right\}
     \]
@@ -266,8 +266,8 @@ All three branches of the tableau are contradictory (cf 2, 5, 7, 8, 10)
 {\small
 \begin{array}{@{}rc}
 &a\leftarrow              \\
-&c\leftarrow \naf{b},\naf{d}  \\
-&d\leftarrow     a,\naf{c}
+&c\leftarrow \neg b,\neg d  \\
+&d\leftarrow     a,\neg c
 \\[3pt]
 \onslide<2->(\mathsf{FTB})&\onslide<2->\Tsigned{\emptyset}         \\
 \onslide<2->(\mathsf{FTA})&\onslide<2->\alert<6>{\Tsigned{a}} \\
@@ -276,9 +276,12 @@ All three branches of the tableau are contradictory (cf 2, 5, 7, 8, 10)
 \onslide<3->(\mathsf{Cut}[\atom{P}])&
 \begin{array}[t]{@{}rcp{30pt}rc}
                  &\onslide<3->\alert<6>{\Tsigned{c}}         & &               & \onslide<3->\Fsigned{c}                 \pause\\
- \onslide<4->(\mathsf{BTA})  &\onslide<4->\Tsigned{\{\naf{b},\naf{d}\}}   & & \onslide<5->(\mathsf{BFA})& \onslide<5->\Fsigned{\{\naf{b},\naf{d}\}}         \\
+ \onslide<4->(\mathsf{BTA})  &\onslide<4->\Tsigned{\{\neg b,\neg d\}}   & & \onslide<5->(\mathsf{BFA})&
+                                                                                                        \onslide<5->\Fsigned{\{\neg
+                                                                                                        b,\neg d\}}         \\
  \onslide<4->(\mathsf{BTB})  &\onslide<4->\Fsigned{d}                 & & \onslide<5->(\mathsf{BFB})& \onslide<5->\alert<6>{\Tsigned{d}}       \\
- \onslide<4->(\mathsf{FFB})  &\onslide<4->\Fsigned{\{a,\naf{c}\}}       & & \onslide<5->(\mathsf{FTB})& \onslide<5->\Tsigned{\{a,\naf{c}\}}
+ \onslide<4->(\mathsf{FFB})  &\onslide<4->\Fsigned{\{a,\neg c\}}       & & \onslide<5->(\mathsf{FTB})&
+                                                                                                       \onslide<5->\Tsigned{\{a,\neg c\}}
 \end{array}
 \end{array}
 }
@@ -298,7 +301,7 @@ All three branches of the tableau are contradictory (cf 2, 5, 7, 8, 10)
         \begin{array}{ll}
           \Tsigned{l}&\text{if $l$ is an atom} % l\in\mathcal{A}
           \\
-          \Fsigned{a}&\text{if $l=\naf{a}$ for an atom $a$} % a\in\mathcal{A}
+          \Fsigned{a}&\text{if $l=\neg a$ for an atom $a$} % a\in\mathcal{A}
         \end{array}
       \right.
       \\[20pt]
@@ -308,13 +311,13 @@ All three branches of the tableau are contradictory (cf 2, 5, 7, 8, 10)
         \begin{array}{ll}
           \Fsigned{l}&\text{if $l$ is an atom} %  l\in\mathcal{A}
           \\
-          \Tsigned{a}&\text{if $l=\naf{a}$ for an atom $a$} % a\in\mathcal{A}
+          \Tsigned{a}&\text{if $l=\neg a$ for an atom $a$} % a\in\mathcal{A}
         \end{array}
       \right.
     \end{array}
     \]
   \item<2-> \structure{Examples}
-    $\plit{a}=\Tsigned{a}$, $\nlit{a}=\Fsigned{a}$, $\plit{\naf{a}}=\Fsigned{a}$, and $\nlit{\naf{a}}=\Tsigned{a}$
+    $\plit{a}=\Tsigned{a}$, $\nlit{a}=\Fsigned{a}$, $\plit{\neg a}=\Fsigned{a}$, and $\nlit{\neg a}=\Tsigned{a}$
 \end{itemize}
 \end{frame}
 % ------------------------------------------------------------
@@ -354,10 +357,10 @@ p \leftarrow l_1,\dots,l_n \\
 \item<2-> \structure{Example}
 \[
 \begin{array}{c}
-a \leftarrow b, \naf{c} \\
+a \leftarrow b, \neg c \\
 \Tsigned{b} \\
 \Fsigned{c} \\\hline
-\Tsigned{\{b, \naf{c}\}}
+\Tsigned{\{b, \neg c\}}
 \end{array}
 \]
 \end{itemize}
@@ -379,13 +382,13 @@ a \leftarrow b, \naf{c} \\
 \item<2-> \structure{Examples}
 \[
 \begin{array}{c}
-\Fsigned{\{b, \naf{c}\}} \\
+\Fsigned{\{b, \neg c\}} \\
 \Tsigned{b} \\\hline
 \Tsigned{c}
 \end{array}
 \qquad\qquad
 \begin{array}{c}
-\Fsigned{\{b, \naf{c}\}} \\
+\Fsigned{\{b, \neg c\}} \\
 \Fsigned{c} \\\hline
 \Fsigned{b}
 \end{array}
@@ -408,15 +411,15 @@ p \leftarrow l_1,\dots,l_i,\dots,l_n \\
 \item<2-> \structure{Examples}
 \[
 \begin{array}{c}
-a \leftarrow b, \naf{c} \\
+a \leftarrow b, \neg c \\
 \Fsigned{b} \\\hline
-\Fsigned{\{b, \naf{c}\}}
+\Fsigned{\{b, \neg c\}}
 \end{array}
 \qquad\qquad
 \begin{array}{c}
-a \leftarrow b, \naf{c} \\
+a \leftarrow b, \neg c \\
 \Tsigned{c} \\\hline
-\Fsigned{\{b, \naf{c}\}}
+\Fsigned{\{b, \neg c\}}
 \end{array}
 \hfill
 \]
@@ -437,12 +440,12 @@ a \leftarrow b, \naf{c} \\
 \item<2-> \structure{Examples}
 \[
 \begin{array}{c}
-\Tsigned{\{b, \naf{c}\}} \\\hline
+\Tsigned{\{b, \neg c\}} \\\hline
 \Tsigned{b}
 \end{array}
 \qquad\qquad
 \begin{array}{c}
-\Tsigned{\{b, \naf{c}\}} \\\hline
+\Tsigned{\{b, \neg c\}} \\\hline
 \Fsigned{c}
 \end{array}
 \hfill
@@ -484,14 +487,14 @@ p \leftarrow l_1,\dots,l_n \\
 \item<2-> \structure{Examples}
 \[
 \begin{array}{c}
-a \leftarrow b, \naf{c} \\
-\Tsigned{\{b, \naf{c}\}} \\\hline
+a \leftarrow b, \neg c \\
+\Tsigned{\{b, \neg c\}} \\\hline
 \Tsigned{a}
 \end{array}
 \qquad\qquad
 \begin{array}{c}
-a \leftarrow d, \naf{e} \\
-\Tsigned{\{d, \naf{e}\}} \\\hline
+a \leftarrow d, \neg e \\
+\Tsigned{\{d, \neg e\}} \\\hline
 \Tsigned{a}
 \end{array}
 \hfill
@@ -514,15 +517,15 @@ p \leftarrow l_1,\dots,l_n \\
 \item<2-> \structure{Examples}
 \[
 \begin{array}{c}
-a \leftarrow b, \naf{c} \\
+a \leftarrow b, \neg c \\
 \Fsigned{a} \\\hline
-\Fsigned{\{b, \naf{c}\}}
+\Fsigned{\{b, \neg c\}}
 \end{array}
 \qquad\qquad
 \begin{array}{c}
-a \leftarrow d, \naf{e} \\
+a \leftarrow d, \neg e \\
 \Fsigned{a} \\\hline
-\Fsigned{\{d, \naf{e}\}}
+\Fsigned{\{d, \neg e\}}
 \end{array}
 \hfill
 \]
@@ -546,9 +549,9 @@ a \leftarrow d, \naf{e} \\
 \item<2-> \structure{Example}
 \[
 \begin{array}{cl}
-\Fsigned{\{b,\naf{c}\}} \\
-\Fsigned{\{d,\naf{e}\}} &
-\raisebox{-8pt}[0pt][0pt]{($\atbody{P}{a} = \{\{b,\naf{c}\},\{d,\naf{e}\}\}$)}
+\Fsigned{\{b,\neg c\}} \\
+\Fsigned{\{d,\neg e\}} &
+\raisebox{-8pt}[0pt][0pt]{($\atbody{P}{a} = \{\{b,\neg c\},\{d,\neg e\}\}$)}
 \\\cline{1-1}
 \Fsigned{a}
 \end{array}
@@ -575,24 +578,24 @@ a \leftarrow d, \naf{e} \\
 \[
 \begin{array}{cl}
 \Tsigned{a} \\
-\Fsigned{\{b,\naf{c}\}} &
+\Fsigned{\{b,\neg c\}} &
 \raisebox{-8pt}[0pt][0pt]{$(*)$}
 \\\cline{1-1}
-\Tsigned{\{d,\naf{e}\}}
+\Tsigned{\{d,\neg e\}}
 \end{array}
 \qquad\qquad
 \begin{array}{cl}
 \Tsigned{a} \\
-\Fsigned{\{d,\naf{e}\}} &
+\Fsigned{\{d,\neg e\}} &
 \raisebox{-8pt}[0pt][0pt]{$(*)$}
 \\\cline{1-1}
-\Tsigned{\{b,\naf{c}\}}
+\Tsigned{\{b,\neg c\}}
 \end{array}
 \hfill
 \]
 \[
 \hfill
-(*)\quad \atbody{P}{a} = \{\{b,\naf{c}\},\{d,\naf{e}\}\}
+(*)\quad \atbody{P}{a} = \{\{b,\neg c\},\{d,\neg e\}\}
 \hfill\hfill
 \]
 %\vspace{-1cm}
@@ -663,8 +666,8 @@ Let $P$ be a normal logic program
 \item<2-> \structure{Examples}
 \[
 \begin{array}[b]{cl}
-a \leftarrow \naf{b} \\
-\Fsigned{\{\naf{b}\}} &
+a \leftarrow \neg b \\
+\Fsigned{\{\neg b\}} &
 \raisebox{-8pt}[0pt][0pt]{$(*)$}
 \\\cline{1-1}
 \Fsigned{a}
@@ -672,8 +675,8 @@ a \leftarrow \naf{b} \\
 \qquad\qquad
 \begin{array}[b]{cl}
 a \leftarrow a \\
-a \leftarrow \naf{b} \\
-\Fsigned{\{\naf{b}\}} &
+a \leftarrow \neg b \\
+\Fsigned{\{\neg b\}} &
 \raisebox{-8pt}[0pt][0pt]{$(*)$}
 \\\cline{1-1}
 \Fsigned{a}
@@ -682,7 +685,7 @@ a \leftarrow \naf{b} \\
 \]
 \[
 \hfill
-(*)\quad a \in \mathbf{U}_P(P \setminus \{a \leftarrow \naf{b}\})
+(*)\quad a \in \mathbf{U}_P(P \setminus \{a \leftarrow \neg b\})
 \hfill\hfill
 \]
 \end{itemize}
@@ -709,26 +712,26 @@ a \leftarrow \naf{b} \\
 \item<2-> \structure{Examples} %~\\[-5mm]
 \[
 \begin{array}[b]{cl}
-a \leftarrow \naf{b} \\
+a \leftarrow \neg b \\
 \Tsigned{a} &
 \raisebox{-8pt}[0pt][0pt]{$(*)$}
 \\\cline{1-1}
-\Tsigned{\{\naf{b}\}}
+\Tsigned{\{\neg b\}}
 \end{array}
 \qquad\qquad
 \begin{array}[b]{cl}
 a \leftarrow a \\
-a \leftarrow \naf{b} \\
+a \leftarrow \neg b \\
 \Tsigned{a} &
 \raisebox{-8pt}[0pt][0pt]{$(*)$}
 \\\cline{1-1}
-\Tsigned{\{\naf{b}\}}
+\Tsigned{\{\neg b\}}
 \end{array}
 \hfill
 \]
 \[
 \hfill
-(*)\quad a \in \mathbf{U}_P(P \setminus \{a \leftarrow \naf{b}\})
+(*)\quad a \in \mathbf{U}_P(P \setminus \{a \leftarrow \neg b\})
 \hfill\hfill
 \]
 %\vspace{-1cm}
@@ -784,9 +787,9 @@ $P'=\{r\in P \mid \pbody{r}\cap F=\emptyset \text{ and } \nbody{r}\cap T=\emptys
 \[
 \begin{array}{cl}
 a \leftarrow a \\
-a \leftarrow \naf{b} \\
-\Fsigned{\{\naf{b}\}} &
-\raisebox{-8pt}[0pt][0pt]{($\EB{\{a\}}{P}=\{\{\naf{b}\}\}$)}
+a \leftarrow \neg b \\
+\Fsigned{\{\neg b\}} &
+\raisebox{-8pt}[0pt][0pt]{($\EB{\{a\}}{P}=\{\{\neg b\}\}$)}
 \\\cline{1-1}
 \Fsigned{a}
 \end{array}
@@ -818,11 +821,11 @@ a \leftarrow \naf{b} \\
 \[
 \begin{array}{cl}
 a \leftarrow a \\
-a \leftarrow \naf{b} \\
+a \leftarrow \neg b \\
 \Tsigned{a}&
-\raisebox{-8pt}[0pt][0pt]{($\EB{\{a\}}{P}=\{\{\naf{b}\}\}$)}
+\raisebox{-8pt}[0pt][0pt]{($\EB{\{a\}}{P}=\{\{\neg b\}\}$)}
 \\\cline{1-1}
-\Tsigned{\{\naf{b}\}}
+\Tsigned{\{\neg b\}}
 \end{array}
 \]
 \end{itemize}
@@ -896,17 +899,17 @@ a \leftarrow \naf{b} \\
 \item<2-> \structure{Examples}
 \[
 \begin{array}{cl}
-a \leftarrow \naf{b} \\
-b \leftarrow \naf{a} &
+a \leftarrow \neg b \\
+b \leftarrow \neg a &
 \raisebox{-8pt}[0pt][0pt]{(${\mathcal{C}} = \atom{P}$)}
 \\\cline{1-1}
 \Tsigned{a} \;\; \mid \;\; \Fsigned{a}
 \\[10pt]
-a \leftarrow \naf{b} \\
-b \leftarrow \naf{a} &
+a \leftarrow \neg b \\
+b \leftarrow \neg a &
 \raisebox{-8pt}[0pt][0pt]{(${\mathcal{C}} = \body{P}$)}
 \\\cline{1-1}
-\Tsigned{\{\naf{b}\}} \;\; \mid \;\; \Fsigned{\{\naf{b}\}}
+\Tsigned{\{\neg b\}} \;\; \mid \;\; \Fsigned{\{\neg b\}}
 \end{array}
 \]
 \end{itemize}
@@ -997,7 +1000,7 @@ b \leftarrow \naf{a} &
     \alert<3-4>{P^n_a} =
     \left\{
       \begin{array}{@{\,}l@{\,}}
-        x \leftarrow \naf{x}      \\
+        x \leftarrow \neg x      \\
         x \leftarrow a_1, b_1     \\
         \multicolumn{1}{c}{\vdots}\\
         x \leftarrow a_n, b_n
@@ -1007,7 +1010,7 @@ b \leftarrow \naf{a} &
     \alert<5-6>{P^n_b} =
     \left\{
       \begin{array}{@{\,}l@{\ }c@{\ }r@{\,}}
-        \multicolumn{3}{@{\,}l@{\,}}{x \leftarrow c_1,\dots,c_n,\naf{x}}   \\
+        \multicolumn{3}{@{\,}l@{\,}}{x \leftarrow c_1,\dots,c_n,\neg x}   \\
         c_1 \leftarrow a_1                                                 &&
         c_1 \leftarrow b_1                                                 \\
         \multicolumn{1}{c}{\vdots}                                         &&
@@ -1020,11 +1023,11 @@ b \leftarrow \naf{a} &
     \alert<3-4,5-6>{P_c^n} =
     \left\{
       \begin{array}{@{\,}l@{\,}}
-        a_1 \leftarrow \naf{b}_1  \\
-        b_1 \leftarrow \naf{a}_1  \\
+        a_1 \leftarrow \neg b_1  \\
+        b_1 \leftarrow \neg a_1  \\
         \multicolumn{1}{c}{\vdots}\\
-        a_n \leftarrow \naf{b}_n  \\
-        b_n \leftarrow \naf{a}_n
+        a_n \leftarrow \neg b_n  \\
+        b_n \leftarrow \neg a_n
       \end{array}
     \right\}
     \]
@@ -1083,15 +1086,15 @@ b \leftarrow \naf{a} &
 % \scriptsize
 % \[
 % \begin{array}{llllllllllll}
-% (r_1)  &  a \leftarrow \naf{b}                  & & &
-% (r_2)  &  b \leftarrow d, \naf{a}               & & &
+% (r_1)  &  a \leftarrow \neg b                  & & &
+% (r_2)  &  b \leftarrow d, \neg a               & & &
 % (r_3)  &  c \leftarrow b, d                            \\[-1mm]
 % (r_4)  &  c \leftarrow g                               & & &
 % (r_5)  &  d \leftarrow c                               & & &
 % (r_6)  &  d \leftarrow g                               \\[-1mm]
-% (r_7)  &  e \leftarrow f, \naf{c}               & & &
-% (r_8)  &  f \leftarrow \naf{g}                  & & &
-% (r_9)  &  g \leftarrow \naf{a}, \naf{f}
+% (r_7)  &  e \leftarrow f, \neg c               & & &
+% (r_8)  &  f \leftarrow \neg g                  & & &
+% (r_9)  &  g \leftarrow \neg a, \neg f
 % \end{array}
 % \]
 % \vspace{-0.7cm}
@@ -1112,22 +1115,22 @@ b \leftarrow \naf{a} &
 %   \Tsigned{a}                                      &
 %   [\textit{Cut}]                                   \\
 % \textbf{(2)}                                       &
-%   \Tsigned{\{\naf{b}\}}                     &
+%   \Tsigned{\{\neg b\}}                     &
 %   [\textit{BTA}{:}\; r_1, \text{1}]                \\
 % \textbf{(3)}                                       &
 %   \Fsigned{b}                                      &
 %   [\textit{BTB}{:}\; \text{2}]                     \\
 % \textbf{(4)}                                       &
-%   \Fsigned{\{d,\naf{a}\}}                   &
+%   \Fsigned{\{d,\neg a\}}                   &
 %   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
 % \textbf{(5)}                                       &
-%   \Fsigned{\{\naf{a},\naf{f}\}}      &
+%   \Fsigned{\{\neg a,\neg f\}}      &
 %   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
 % \textbf{(6)}                                       &
 %   \Fsigned{g}                                      &
 %   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
 % \textbf{(7)}                                       &
-%   \Tsigned{\{\naf{g}\}}                     &
+%   \Tsigned{\{\neg g\}}                     &
 %   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
 % \textbf{(8)}                                       &
 %   \Tsigned{f}                                      &
@@ -1148,7 +1151,7 @@ b \leftarrow \naf{a} &
 %   \Fsigned{d}                                      &
 %   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
 % \textbf{(14)}                                      &
-%   \Tsigned{\{f,\naf{c}\}}                   &
+%   \Tsigned{\{f,\neg c\}}                   &
 %   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
 % \textbf{(15)}                                      &
 %   \Tsigned{e}                                      &
@@ -1167,13 +1170,13 @@ b \leftarrow \naf{a} &
 %   \Fsigned{a}                                      &
 %   [\textit{Cut}]                                   \\
 % \textbf{(17)}                                      &
-%   \Fsigned{\{\naf{b}\}}                     &
+%   \Fsigned{\{\neg b\}}                     &
 %   [\textit{BFA}{:}\; r_1, \text{16}]               \\
 % \textbf{(18)}                                      &
 %   \Tsigned{b}                                      &
 %   [\textit{BFB}{:}\; \text{17}]                    \\
 % \textbf{(19)}                                      &
-%   \Tsigned{\{d,\naf{a}\}}                   &
+%   \Tsigned{\{d,\neg a\}}                   &
 %   [\textit{BTA}{:}\;r_2, \text{18}]                \\
 % \textbf{(20)}                                      &
 %   \Tsigned{d}                                      &
@@ -1185,7 +1188,7 @@ b \leftarrow \naf{a} &
 %   \Tsigned{c}                                      &
 %   [\textit{FTA}{:}\;r_3, \text{21}]                \\
 % \textbf{(23)}                                      &
-%   \Fsigned{\{f,\naf{c}\}}                   &
+%   \Fsigned{\{f,\neg c\}}                   &
 %   [\textit{FFB}{:}\;r_7, \text{22}]                \\
 % \textbf{(24)}                                      &
 %   \Fsigned{e}                                      &
@@ -1207,7 +1210,7 @@ b \leftarrow \naf{a} &
 %   \Tsigned{f}                                      &
 %   [\textit{Cut}]                                   \\
 % \textbf{(27)}                                      & \hspace{-0.1cm}
-%   \Fsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+%   \Fsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
 %   [\textit{FFB}{:}\;r_9, \text{26}]                \\
 % \textbf{(28)}                                      &
 %   \Fsigned{g}                                      &
@@ -1216,7 +1219,7 @@ b \leftarrow \naf{a} &
 %   \Fsigned{\{g\}}                                  &
 %   [\textit{FFB}{:}\;r_4, r_6, \text{28}]            \\
 % \textbf{(30)}                                      &
-%   \Tsigned{\{\naf{g}\}}                     &
+%   \Tsigned{\{\neg g\}}                     &
 %   [\textit{FTB}{:}\;r_8, \text{28}]                %\\
 % %\textbf{(31)}                                      &
 % %  \Fsigned{c}                                      &
@@ -1237,7 +1240,7 @@ b \leftarrow \naf{a} &
 %   \Fsigned{f}                                      &
 %   [\textit{Cut}]                                   \\
 % \textbf{(32)}                                      & \hspace{-0.1cm}
-%   \Tsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+%   \Tsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
 %   [\textit{FTB}{:}\;r_9, \text{16}, \text{31}]     \\
 % \textbf{(33)}                                      &
 %   \Tsigned{g}                                      &
@@ -1246,7 +1249,7 @@ b \leftarrow \naf{a} &
 %   \Tsigned{\{g\}}                                  &
 %   [\textit{FTB}{:}\;r_4, r_6, \text{33}]           \\
 % \textbf{(35)}                                      &
-%   \Fsigned{\{\naf{g}\}}                     &
+%   \Fsigned{\{\neg g\}}                     &
 %   [\textit{FFB}{:}\;r_8, \text{33}]
 % \end{array}
 % \]
@@ -1266,15 +1269,15 @@ b \leftarrow \naf{a} &
 % \scriptsize
 % \[
 % \begin{array}{llllllllllll}
-% (r_1)  &  a \leftarrow \naf{b}                  & & &
-% (r_2)  &  b \leftarrow d, \naf{a}               & & &
+% (r_1)  &  a \leftarrow \neg b                  & & &
+% (r_2)  &  b \leftarrow d, \neg a               & & &
 % (r_3)  &  c \leftarrow b, d                            \\[-1mm]
 % (r_4)  &  c \leftarrow g                               & & &
 % (r_5)  &  d \leftarrow c                               & & &
 % (r_6)  &  d \leftarrow g                               \\[-1mm]
-% (r_7)  &  e \leftarrow f, \naf{c}               & & &
-% (r_8)  &  f \leftarrow \naf{g}                  & & &
-% (r_9)  &  g \leftarrow \naf{a}, \naf{f}
+% (r_7)  &  e \leftarrow f, \neg c               & & &
+% (r_8)  &  f \leftarrow \neg g                  & & &
+% (r_9)  &  g \leftarrow \neg a, \neg f
 % \end{array}
 % \]
 % \vspace{-0.7cm}
@@ -1295,22 +1298,22 @@ b \leftarrow \naf{a} &
 %   \Tsigned{a}                                      &
 %   [\textit{Cut}]                                   \\
 % \textbf{(2)}                                       &
-%   \Tsigned{\{\naf{b}\}}                     &
+%   \Tsigned{\{\neg b\}}                     &
 %   [\textit{BTA}{:}\; r_1, \text{1}]                \\
 % \textbf{(3)}                                       &
 %   \Fsigned{b}                                      &
 %   [\textit{BTB}{:}\; \text{2}]                     \\
 % \textbf{(4)}                                       &
-%   \Fsigned{\{d,\naf{a}\}}                   &
+%   \Fsigned{\{d,\neg a\}}                   &
 %   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
 % \textbf{(5)}                                       &
-%   \Fsigned{\{\naf{a},\naf{f}\}}      &
+%   \Fsigned{\{\neg a,\neg f\}}      &
 %   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
 % \textbf{(6)}                                       &
 %   \Fsigned{g}                                      &
 %   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
 % \textbf{(7)}                                       &
-%   \Tsigned{\{\naf{g}\}}                     &
+%   \Tsigned{\{\neg g\}}                     &
 %   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
 % \textbf{(8)}                                       &
 %   \Tsigned{f}                                      &
@@ -1331,7 +1334,7 @@ b \leftarrow \naf{a} &
 %   \Fsigned{d}                                      &
 %   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
 % \textbf{(14)}                                      &
-%   \Tsigned{\{f,\naf{c}\}}                   &
+%   \Tsigned{\{f,\neg c\}}                   &
 %   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
 % \textbf{(15)}                                      &
 %   \Tsigned{e}                                      &
@@ -1350,13 +1353,13 @@ b \leftarrow \naf{a} &
 %   \Fsigned{a}                                      &
 %   [\textit{Cut}]                                   \\
 % \textbf{(17)}                                      &
-%   \Fsigned{\{\naf{b}\}}                     &
+%   \Fsigned{\{\neg b\}}                     &
 %   [\textit{BFA}{:}\; r_1, \text{16}]               \\
 % \textbf{(18)}                                      &
 %   \Tsigned{b}                                      &
 %   [\textit{BFB}{:}\; \text{17}]                    \\
 % \textbf{(19)}                                      &
-%   \Tsigned{\{d,\naf{a}\}}                   &
+%   \Tsigned{\{d,\neg a\}}                   &
 %   [\textit{BTA}{:}\;r_2, \text{18}]                \\
 % \textbf{(20)}                                      &
 %   \Tsigned{d}                                      &
@@ -1368,7 +1371,7 @@ b \leftarrow \naf{a} &
 %   \Tsigned{c}                                      &
 %   [\textit{FTA}{:}\;r_3, \text{21}]                \\
 % \textbf{(23)}                                      &
-%   \Fsigned{\{f,\naf{c}\}}                   &
+%   \Fsigned{\{f,\neg c\}}                   &
 %   [\textit{FFB}{:}\;r_7, \text{22}]                \\
 % \textbf{(24)}                                      &
 %   \Fsigned{e}                                      &
@@ -1390,7 +1393,7 @@ b \leftarrow \naf{a} &
 %   \Tsigned{f}                                      &
 %   [\textit{Cut}]                                   \\
 % \textbf{(27)}                                      & \hspace{-0.1cm}
-%   \Fsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+%   \Fsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
 %   [\textit{FFB}{:}\;r_9, \text{26}]                \\
 % \textbf{(28)}                                      &
 %   \Fsigned{g}                                      &
@@ -1399,7 +1402,7 @@ b \leftarrow \naf{a} &
 %   \Fsigned{\{g\}}                                  &
 %   [\textit{FFB}{:}\;r_4, r_6, \text{28}]            \\
 % \textbf{(30)}                                      &
-%   \Tsigned{\{\naf{g}\}}                     &
+%   \Tsigned{\{\neg g\}}                     &
 %   [\textit{FTB}{:}\;r_8, \text{28}]                \\
 % \textbf{(31)}                                      &
 %   \Fsigned{c}                                      &
@@ -1420,7 +1423,7 @@ b \leftarrow \naf{a} &
 %   \Fsigned{f}                                      &
 %   [\textit{Cut}]                                   \\
 % \textbf{(33)}                                      & \hspace{-0.1cm}
-%   \Tsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+%   \Tsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
 %   [\textit{FTB}{:}\;r_9, \text{16}, \text{32}]     \\
 % \textbf{(34)}                                      &
 %   \Tsigned{g}                                      &
@@ -1429,7 +1432,7 @@ b \leftarrow \naf{a} &
 %   \Tsigned{\{g\}}                                  &
 %   [\textit{FTB}{:}\;r_4, r_6, \text{34}]           \\
 % \textbf{(36)}                                      &
-%   \Fsigned{\{\naf{g}\}}                     &
+%   \Fsigned{\{\neg g\}}                     &
 %   [\textit{FFB}{:}\;r_8, \text{34}]
 % \end{array}
 % \]
@@ -1446,15 +1449,15 @@ b \leftarrow \naf{a} &
 \small
 \[
 \begin{array}{llllllllllll}
-(r_1)  &  a \leftarrow \naf{b}                  & & &
-(r_2)  &  b \leftarrow d, \naf{a}               & & &
+(r_1)  &  a \leftarrow \neg b                  & & &
+(r_2)  &  b \leftarrow d, \neg a               & & &
 (r_3)  &  c \leftarrow b, d                            \\
 (r_4)  &  c \leftarrow g                               & & &
 (r_5)  &  d \leftarrow c                               & & &
 (r_6)  &  d \leftarrow g                               \\
-(r_7)  &  e \leftarrow f, \naf{c}               & & &
-(r_8)  &  f \leftarrow \naf{g}                  & & &
-(r_9)  &  g \leftarrow \naf{a}, \naf{f}
+(r_7)  &  e \leftarrow f, \neg c               & & &
+(r_8)  &  f \leftarrow \neg g                  & & &
+(r_9)  &  g \leftarrow \neg a, \neg f
 \end{array}
 \]
 \begin{center}
@@ -1469,22 +1472,22 @@ b \leftarrow \naf{a} &
   \Tsigned{a}                                      &
   [\textit{Cut}]                                   \\
 \textbf{(2)}                                       &
-  \Tsigned{\{\naf{b}\}}                     &
+  \Tsigned{\{\neg b\}}                     &
   [\textit{BTA}{:}\; r_1, \text{1}]                \\
 \textbf{(3)}                                       &
   \Fsigned{b}                                      &
   [\textit{BTB}{:}\; \text{2}]                     \\
 \textbf{(4)}                                       &
-  \Fsigned{\{d,\naf{a}\}}                   &
+  \Fsigned{\{d,\neg a\}}                   &
   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
 \textbf{(5)}                                       &
-  \Fsigned{\{\naf{a},\naf{f}\}}      &
+  \Fsigned{\{\neg a,\neg f\}}      &
   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
 \textbf{(6)}                                       &
   \Fsigned{g}                                      &
   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
 \textbf{(7)}                                       &
-  \Tsigned{\{\naf{g}\}}                     &
+  \Tsigned{\{\neg g\}}                     &
   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
 \textbf{(8)}                                       &
   \Tsigned{f}                                      &
@@ -1505,7 +1508,7 @@ b \leftarrow \naf{a} &
   \Fsigned{d}                                      &
   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
 \textbf{(14)}                                      &
-  \Tsigned{\{f,\naf{c}\}}                   &
+  \Tsigned{\{f,\neg c\}}                   &
   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
 \textbf{(15)}                                      &
   \Tsigned{e}                                      &
@@ -1521,13 +1524,13 @@ b \leftarrow \naf{a} &
   \Fsigned{a}                                      &
   [\textit{Cut}]                                   \\
 \textbf{(17)}                                      &
-  \Fsigned{\{\naf{b}\}}                     &
+  \Fsigned{\{\neg b\}}                     &
   [\textit{BFA}{:}\; r_1, \text{16}]               \\
 \textbf{(18)}                                      &
   \Tsigned{b}                                      &
   [\textit{BFB}{:}\; \text{17}]                    \\
 \textbf{(19)}                                      &
-  \Tsigned{\{d,\naf{a}\}}                   &
+  \Tsigned{\{d,\neg a\}}                   &
   [\textit{BTA}{:}\;r_2, \text{18}]                \\
 \textbf{(20)}                                      &
   \Tsigned{d}                                      &
@@ -1539,7 +1542,7 @@ b \leftarrow \naf{a} &
   \Tsigned{c}                                      &
   [\textit{FTA}{:}\;r_3, \text{21}]                \\
 \textbf{(23)}                                      &
-  \Fsigned{\{f,\naf{c}\}}                   &
+  \Fsigned{\{f,\neg c\}}                   &
   [\textit{FFB}{:}\;r_7, \text{22}]                \\
 \textbf{(24)}                                      &
   \Fsigned{e}                                      &
@@ -1559,7 +1562,7 @@ b \leftarrow \naf{a} &
   \Tsigned{f}                                      &
   [\textit{Cut}]                                   \\
 \textbf{(27)}                                      & \hspace{-0.1cm}
-  \Fsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+  \Fsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
   [\textit{FFB}{:}\;r_9, \text{26}]                \\
 \textbf{(28)}                                      &
   \Fsigned{c}                                      &
@@ -1576,7 +1579,7 @@ b \leftarrow \naf{a} &
   \Fsigned{f}                                      &
   [\textit{Cut}]                                   \\
 \textbf{(30)}                                      & \hspace{-0.1cm}
-  \Tsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+  \Tsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
   [\textit{FTB}{:}\;r_9, \text{16}, \text{29}]     \\
 \textbf{(31)}                                      &
   \Tsigned{g}                                      &
@@ -1585,7 +1588,7 @@ b \leftarrow \naf{a} &
   \Tsigned{\{g\}}                                  &
   [\textit{FTB}{:}\;r_4, r_6, \text{31}]           \\
 \textbf{(33)}                                      &
-  \Fsigned{\{\naf{g}\}}                     &
+  \Fsigned{\{\neg g\}}                     &
   [\textit{FFB}{:}\;r_8, \text{31}]
 \end{array}
 \]
@@ -1600,15 +1603,15 @@ b \leftarrow \naf{a} &
 \small
 \[
 \begin{array}{llllllllllll}
-(r_1)  &  a \leftarrow \naf{b}                  & & &
-(r_2)  &  b \leftarrow d, \naf{a}               & & &
+(r_1)  &  a \leftarrow \neg b                  & & &
+(r_2)  &  b \leftarrow d, \neg a               & & &
 (r_3)  &  c \leftarrow b, d                            \\
 (r_4)  &  c \leftarrow g                               & & &
 (r_5)  &  d \leftarrow c                               & & &
 (r_6)  &  d \leftarrow g                               \\
-(r_7)  &  e \leftarrow f, \naf{c}               & & &
-(r_8)  &  f \leftarrow \naf{g}                  & & &
-(r_9)  &  g \leftarrow \naf{a}, \naf{f}
+(r_7)  &  e \leftarrow f, \neg c               & & &
+(r_8)  &  f \leftarrow \neg g                  & & &
+(r_9)  &  g \leftarrow \neg a, \neg f
 \end{array}
 \]
 \begin{center}
@@ -1620,7 +1623,7 @@ b \leftarrow \naf{a} &
 \hspace{-0.2cm}
 \begin{array}{lcl}
 \textbf{(1)}                                       &
-  \Tsigned{\{\naf{b}\}}                     &
+  \Tsigned{\{\neg b\}}                     &
   [\textit{Cut}]                                   \\
 \textbf{(2)}                                       &
   \Tsigned{a}                                      &
@@ -1629,16 +1632,16 @@ b \leftarrow \naf{a} &
   \Fsigned{b}                                      &
   [\textit{BTB}{:}\; \text{1}]                     \\
 \textbf{(4)}                                       &
-  \Fsigned{\{d,\naf{a}\}}                   &
+  \Fsigned{\{d,\neg a\}}                   &
   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
 \textbf{(5)}                                       &
-  \Fsigned{\{\naf{a},\naf{f}\}}      &
+  \Fsigned{\{\neg a,\neg f\}}      &
   [\textit{FFB}{:}\;r_9, \text{2}]                 \\
 \textbf{(6)}                                       &
   \Fsigned{g}                                      &
   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
 \textbf{(7)}                                       &
-  \Tsigned{\{\naf{g}\}}                     &
+  \Tsigned{\{\neg g\}}                     &
   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
 \textbf{(8)}                                       &
   \Tsigned{f}                                      &
@@ -1659,7 +1662,7 @@ b \leftarrow \naf{a} &
   \Fsigned{d}                                      &
   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
 \textbf{(14)}                                      &
-  \Tsigned{\{f,\naf{c}\}}                   &
+  \Tsigned{\{f,\neg c\}}                   &
   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
 \textbf{(15)}                                      &
   \Tsigned{e}                                      &
@@ -1672,7 +1675,7 @@ b \leftarrow \naf{a} &
 \hspace{2.2cm}
 \begin{array}{lcl}
 \textbf{(16)}                                      &
-  \Fsigned{\{\naf{b}\}}                     &
+  \Fsigned{\{\neg b\}}                     &
   [\textit{Cut}]                                   \\
 \textbf{(17)}                                      &
   \Fsigned{a}                                      &
@@ -1681,7 +1684,7 @@ b \leftarrow \naf{a} &
   \Tsigned{b}                                      &
   [\textit{BFB}{:}\; \text{16}]                    \\
 \textbf{(19)}                                      &
-  \Tsigned{\{d,\naf{a}\}}                   &
+  \Tsigned{\{d,\neg a\}}                   &
   [\textit{BTA}{:}\;r_2, \text{18}]                \\
 \textbf{(20)}                                      &
   \Tsigned{d}                                      &
@@ -1693,7 +1696,7 @@ b \leftarrow \naf{a} &
   \Tsigned{c}                                      &
   [\textit{FTA}{:}\;r_3, \text{21}]                \\
 \textbf{(23)}                                      &
-  \Fsigned{\{f,\naf{c}\}}                   &
+  \Fsigned{\{f,\neg c\}}                   &
   [\textit{FFB}{:}\;r_7, \text{22}]                \\
 \textbf{(24)}                                      &
   \Fsigned{e}                                      &
@@ -1709,7 +1712,7 @@ b \leftarrow \naf{a} &
 \hspace{0.25cm}
 \begin{array}{l@{~~}c@{~~}l}
 \textbf{(26)}                                      &
-  \Tsigned{\{\naf{g}\}}                     &
+  \Tsigned{\{\neg g\}}                     &
   [\textit{Cut}]                                   \\
 \textbf{(27)}                                      &
   \Fsigned{g}                                      &
@@ -1728,7 +1731,7 @@ b \leftarrow \naf{a} &
 \hspace{2.75cm}
 \begin{array}{l@{~~}c@{~~}l}
 \textbf{(30)}                                      &
-  \Fsigned{\{\naf{g}\}}                     &
+  \Fsigned{\{\neg g\}}                     &
   [\textit{Cut}]                                   \\
 \textbf{(31)}                                      &
   \Tsigned{g}                                      &
@@ -1740,7 +1743,7 @@ b \leftarrow \naf{a} &
   \Fsigned{f}                                      &
   [\textit{FFA}{:}\;r_8, \text{30}]                \\
 \textbf{(34)}                                      & \hspace{-0.1cm}
-  \Tsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+  \Tsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
   [\textit{FTB}{:}\;r_9, \text{17}, \text{33}]
 \end{array}
 \]
@@ -1754,15 +1757,15 @@ b \leftarrow \naf{a} &
 \small
 \[
 \begin{array}{llllllllllll}
-(r_1)  &  a \leftarrow \naf{b}                  & & &
-(r_2)  &  b \leftarrow d, \naf{a}               & & &
+(r_1)  &  a \leftarrow \neg b                  & & &
+(r_2)  &  b \leftarrow d, \neg a               & & &
 (r_3)  &  c \leftarrow b, d                            \\
 (r_4)  &  c \leftarrow g                               & & &
 (r_5)  &  d \leftarrow c                               & & &
 (r_6)  &  d \leftarrow g                               \\
-(r_7)  &  e \leftarrow f, \naf{c}               & & &
-(r_8)  &  f \leftarrow \naf{g}                  & & &
-(r_9)  &  g \leftarrow \naf{a}, \naf{f}
+(r_7)  &  e \leftarrow f, \neg c               & & &
+(r_8)  &  f \leftarrow \neg g                  & & &
+(r_9)  &  g \leftarrow \neg a, \neg f
 \end{array}
 \]
 \begin{center}
@@ -1777,22 +1780,22 @@ b \leftarrow \naf{a} &
   \Tsigned{a}                                      &
   [\textit{Cut}]                                   \\
 \textbf{(2)}                                       &
-  \Tsigned{\{\naf{b}\}}                     &
+  \Tsigned{\{\neg b\}}                     &
   [\textit{BTA}{:}\; r_1, \text{1}]                \\
 \textbf{(3)}                                       &
   \Fsigned{b}                                      &
   [\textit{BTB}{:}\; \text{2}]                     \\
 \textbf{(4)}                                       &
-  \Fsigned{\{d,\naf{a}\}}                   &
+  \Fsigned{\{d,\neg a\}}                   &
   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
 \textbf{(5)}                                       &
-  \Fsigned{\{\naf{a},\naf{f}\}}      &
+  \Fsigned{\{\neg a,\neg f\}}      &
   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
 \textbf{(6)}                                       &
   \Fsigned{g}                                      &
   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
 \textbf{(7)}                                       &
-  \Tsigned{\{\naf{g}\}}                     &
+  \Tsigned{\{\neg g\}}                     &
   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
 \textbf{(8)}                                       &
   \Tsigned{f}                                      &
@@ -1813,7 +1816,7 @@ b \leftarrow \naf{a} &
   \Fsigned{d}                                      &
   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
 \textbf{(14)}                                      &
-  \Tsigned{\{f,\naf{c}\}}                   &
+  \Tsigned{\{f,\neg c\}}                   &
   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
 \textbf{(15)}                                      &
   \Tsigned{e}                                      &
@@ -1829,13 +1832,13 @@ b \leftarrow \naf{a} &
   \Fsigned{a}                                      &
   [\textit{Cut}]                                   \\
 \textbf{(17)}                                      &
-  \Fsigned{\{\naf{b}\}}                     &
+  \Fsigned{\{\neg b\}}                     &
   [\textit{BFA}{:}\; r_1, \text{16}]               \\
 \textbf{(18)}                                      &
   \Tsigned{b}                                      &
   [\textit{BFB}{:}\; \text{17}]                    \\
 \textbf{(19)}                                      &
-  \Tsigned{\{d,\naf{a}\}}                   &
+  \Tsigned{\{d,\neg a\}}                   &
   [\textit{BTA}{:}\;r_2, \text{18}]                \\
 \textbf{(20)}                                      &
   \Tsigned{d}                                      &
@@ -1847,7 +1850,7 @@ b \leftarrow \naf{a} &
   \Tsigned{c}                                      &
   [\textit{FTA}{:}\;r_3, \text{21}]                \\
 \textbf{(23)}                                      &
-  \Fsigned{\{f,\naf{c}\}}                   &
+  \Fsigned{\{f,\neg c\}}                   &
   [\textit{FFB}{:}\;r_7, \text{22}]                \\
 \textbf{(24)}                                      &
   \Fsigned{e}                                      &
@@ -1866,7 +1869,7 @@ b \leftarrow \naf{a} &
 %\fi
 \begin{array}{l@{~~}c@{~~}l}
 \textbf{(26)}                                      &
-  \Tsigned{\{\naf{g}\}}                     &
+  \Tsigned{\{\neg g\}}                     &
   [\textit{Cut}]                                   \\
 \textbf{(27)}                                      &
   \Fsigned{g}                                      &
@@ -1890,7 +1893,7 @@ b \leftarrow \naf{a} &
 %\fi
 \begin{array}{l@{~~}c@{~~}l}
 \textbf{(30)}                                      &
-  \Fsigned{\{\naf{g}\}}                     &
+  \Fsigned{\{\neg g\}}                     &
   [\textit{Cut}]                                   \\
 \textbf{(31)}                                      &
   \Tsigned{g}                                      &
@@ -1902,7 +1905,7 @@ b \leftarrow \naf{a} &
   \Fsigned{f}                                      &
   [\textit{FFA}{:}\;r_8, \text{30}]                \\
 \textbf{(34)}                                      & \hspace{-0.1cm}
-  \Tsigned{\{\naf{a},\naf{f}\}}      \hspace{-0.1cm} &
+  \Tsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
   [\textit{FTB}{:}\;r_9, \text{16}, \text{33}]
 \end{array}
 \]
@@ -1920,15 +1923,15 @@ b \leftarrow \naf{a} &
 % \scriptsize
 % \[
 % \begin{array}{llllllllllll}
-% (r_1)  &  a \leftarrow \naf{b}                  & & &
-% (r_2)  &  b \leftarrow d, \naf{a}               & & &
+% (r_1)  &  a \leftarrow \neg b                  & & &
+% (r_2)  &  b \leftarrow d, \neg a               & & &
 % (r_3)  &  c \leftarrow b, d                            \\[-1mm]
 % (r_4)  &  c \leftarrow g                               & & &
 % (r_5)  &  d \leftarrow c                               & & &
 % (r_6)  &  d \leftarrow g                               \\[-1mm]
-% (r_7)  &  e \leftarrow f, \naf{c}               & & &
-% (r_8)  &  f \leftarrow \naf{g}                  & & &
-% (r_9)  &  g \leftarrow \naf{a}, \naf{f}
+% (r_7)  &  e \leftarrow f, \neg c               & & &
+% (r_8)  &  f \leftarrow \neg g                  & & &
+% (r_9)  &  g \leftarrow \neg a, \neg f
 % \end{array}
 % \]
 % \vspace{-0.7cm}
@@ -1945,22 +1948,22 @@ b \leftarrow \naf{a} &
 %   \Tsigned{a}                                      &
 %   [\textit{Cut}]                                   \\
 % \textbf{(2)}                                       &
-%   \Tsigned{\{\naf{b}\}}                     &
+%   \Tsigned{\{\neg b\}}                     &
 %   [\textit{BTA}{:}\; r_1, \text{1}]                \\
 % \textbf{(3)}                                       &
 %   \Fsigned{b}                                      &
 %   [\textit{BTB}{:}\; \text{2}]                     \\
 % \textbf{(4)}                                       &
-%   \Fsigned{\{d,\naf{a}\}}                   &
+%   \Fsigned{\{d,\neg a\}}                   &
 %   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
 % \textbf{(5)}                                       &
-%   \Fsigned{\{\naf{a},\naf{f}\}}      &
+%   \Fsigned{\{\neg a,\neg f\}}      &
 %   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
 % \textbf{(6)}                                       &
 %   \Fsigned{g}                                      &
 %   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
 % \textbf{(7)}                                       &
-%   \Tsigned{\{\naf{g}\}}                     &
+%   \Tsigned{\{\neg g\}}                     &
 %   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
 % \textbf{(8)}                                       &
 %   \Tsigned{f}                                      &
@@ -1981,7 +1984,7 @@ b \leftarrow \naf{a} &
 %   \Fsigned{d}                                      &
 %   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
 % \textbf{(14)}                                      &
-%   \Tsigned{\{f,\naf{c}\}}                   &
+%   \Tsigned{\{f,\neg c\}}                   &
 %   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
 % \textbf{(15)}                                      &
 %   \Tsigned{e}                                      &
@@ -2000,13 +2003,13 @@ b \leftarrow \naf{a} &
 %   \Fsigned{a}                                      &
 %   [\textit{Cut}]                                   \\
 % \textbf{(17)}                                      &
-%   \Fsigned{\{\naf{b}\}}                     &
+%   \Fsigned{\{\neg b\}}                     &
 %   [\textit{BFA}{:}\; r_1, \text{16}]               \\
 % \textbf{(18)}                                      &
 %   \Tsigned{b}                                      &
 %   [\textit{BFB}{:}\; \text{17}]                    \\
 % \textbf{(19)}                                      &
-%   \Tsigned{\{d,\naf{a}\}}                   &
+%   \Tsigned{\{d,\neg a\}}                   &
 %   [\textit{BTA}{:}\;r_2, \text{18}]                \\
 % \textbf{(20)}                                      &
 %   \Tsigned{d}                                      &
@@ -2018,7 +2021,7 @@ b \leftarrow \naf{a} &
 %   \Tsigned{c}                                      &
 %   [\textit{FTA}{:}\;r_3, \text{21}]                \\
 % \textbf{(23)}                                      &
-%   \Fsigned{\{f,\naf{c}\}}                   &
+%   \Fsigned{\{f,\neg c\}}                   &
 %   [\textit{FFB}{:}\;r_7, \text{22}]                \\
 % \textbf{(24)}                                      &
 %   \Fsigned{e}                                      &
@@ -2033,10 +2036,10 @@ b \leftarrow \naf{a} &
 %   \Tsigned{g}                                      &
 %   [\textit{BTB}{:}\;\text{26}]                     \\
 % \textbf{(28)}                                      &
-%   \Tsigned{\{\naf{a},\naf{f}\}}      &
+%   \Tsigned{\{\neg a,\neg f\}}      &
 %   [\textit{BTA}{:}\;r_9, \text{27}]                \\
 % \textbf{(29)}                                      &
-%   \Fsigned{\{\naf{g}\}}                     &
+%   \Fsigned{\{\neg g\}}                     &
 %   [\textit{FFB}{:}\;r_8, \text{27}]                \\
 % \textbf{(30)}                                      &
 %   \Fsigned{f}                                      &
@@ -2051,8 +2054,8 @@ b \leftarrow \naf{a} &
 % %
 % \end{frame}
 %----------------------------------------------------------------
+
 %%% Local Variables:
 %%% mode: latex
-%%% TeX-PDF-mode: t
-%%% TeX-master: "../asp"
+%%% TeX-master: "../../main"
 %%% End:
