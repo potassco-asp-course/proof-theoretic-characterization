@@ -2,15 +2,15 @@
 \begin{frame}{Motivation}
   \bigskip
   \begin{itemize}
-  \item<1-> \structure{Goal} Analyze computations in ASP solvers
+  \item<1-> \structure{Goal} \ Analyze computations in ASP solvers
     \smallskip
-  \item<1-> \structure{Wanted}
+  \item<1-> \structure{Wanted} \
     A declarative and fine-grained instrument for \\ characterizing
-    operations as well as strategies of ASP solvers
+    operations and strategies of ASP solvers
     \bigskip
-  \item<2-> \structure{Idea}
+  \item<2-> \structure{Idea} \
     View stable model computations as derivations in\\ an inference system
-  \item<3-> [] Consider \alert{Tableau-based proof systems} for analyzing ASP solving
+  \item<3-> [] \itarrow\ \alert{Tableau-based proof systems} for analyzing ASP solving
 \end{itemize}
 \end{frame}
 % ----------------------------------------------------------------------
@@ -24,9 +24,8 @@
     \end{itemize}
     in classical as well as non-classical logics
     \medskip
-  \item \structure{General idea}
-    Given an input, prove some property by decomposition
-    Decomposition is done by applying deduction rules
+  \item \structure{General idea} \ Given an input, prove some property by decomposition
+  \item [] Decomposition is done by applying deduction rules \smallskip
   \item For details, see \emph{Handbook of Tableau Methods}, Kluwer, 1999 \cite{TableauHandbook}
   \end{itemize}
 \end{frame}
@@ -46,10 +45,10 @@ applying\\ \alert{tableau rules} of form
 \gamma_1,\dots,\gamma_m\\
 \hline
 \alpha_1\\[-1mm]
-\vdots\\[-2mm]
+\vdots\\[-1mm]
 \alpha_n
 \end{array}
-\qquad\qquad\pause[3]\qquad\qquad
+\qquad\qquad\qquad
 \begin{array}[t]{c}
 \gamma_1,\dots,\gamma_m\\
 \hline
@@ -57,7 +56,7 @@ applying\\ \alert{tableau rules} of form
 \end{array}
 \qquad\qquad
 \]
-\item<2->
+\item<3->
 Rules of the former format append entries $\alpha_1,\dots,\alpha_n$ to the branch
 \item<3->
 Rules of the latter format create multiple sub-branches for $\beta_1,\dots,\beta_n$
@@ -93,10 +92,10 @@ Rules of the latter format create multiple sub-branches for $\beta_1,\dots,\beta
     A propositional formula $\varphi$ % (composed from $\neg$, $\wedge$, and $\vee$)
     is unsatisfiable iff
     there is a tableau with\\ $\varphi$ as the root node such that
-    \begin{enumerate}
+    \begin{itemize}\normalsize
     \item all other entries can be produced by tableau rules and
     \item every branch contains some formulas $\alpha$ and $\neg\alpha$
-    \end{enumerate}
+    \end{itemize}
   \end{itemize}
 \end{frame}
 % ----------------------------------------------------------------------
