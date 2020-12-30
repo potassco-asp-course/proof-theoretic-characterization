@@ -1,4 +1,4 @@
-%----------------------------------------------------------------
+% ----------------------------------------------------------------------
 \begin{frame}{Proof complexity}
   \begin{itemize}
   \item<1-> \alert{Proof complexity} is used for describing the relative efficiency of different proof systems
@@ -17,7 +17,7 @@
     \alert{Counting required $\textit{Cut}$ applications is sufficient !}
   \end{itemize}
 \end{frame}
-%----------------------------------------------------------------
+% ----------------------------------------------------------------------
 \begin{frame}{${\mathcal{T}}_{\textit{smodels}}$ versus ${\mathcal{T}}_{\textit{noMoRe}}$}
   \begin{itemize}
   \item<1-> \alert<8>{${\mathcal{T}}_{\textit{smodels}}$} restricts $\textit{Cut}$ to $\atom{P}$ and \alert<7>{${\mathcal{T}}_{\textit{noMoRe}}$} to $\body{P}$
@@ -83,7 +83,7 @@
     \textcolor<6>{red}{${\mathcal{T}}_{\textit{noMoRe}}$}
 \end{itemize}
 \end{frame}
-%----------------------------------------------------------------
+% ----------------------------------------------------------------------
 \begin{frame}{Relative efficiency}
   \begin{itemize}
   \item<1-> As witnessed by $\{P^n_a\cup P^n_c\}$ and $\{P^n_b\cup P^n_c\}$, respectively, \\
@@ -93,13 +93,13 @@
     ${\mathcal{T}}_{\textit{noMoRe}}$ is a refutation of ${\mathcal{T}}_{\textit{nomore}^{++}}$ \\
     (but not vice versa)
   \item<3-> Hence
-    \begin{itemize}
+    \begin{itemize}\normalsize
     \item both ${\mathcal{T}}_{\textit{smodels}}$ and ${\mathcal{T}}_{\textit{noMoRe}}$
       are polynomially simulated by ${\mathcal{T}}_{\textit{nomore}^{++}}$ and
     \item ${\mathcal{T}}_{\textit{nomore}^{++}}$ is polynomially simulated
       by neither ${\mathcal{T}}_{\textit{smodels}}$ nor ${\mathcal{T}}_{\textit{noMoRe}}$
     \end{itemize}
-     \bigskip
+     \medskip
   \item<4-> More generally,
     the proof system obtained with $\textit{Cut}[\atom{P}\cup\body{P}]$ is \alert{exponentially stronger} than
     \\
