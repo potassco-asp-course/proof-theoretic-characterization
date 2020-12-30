@@ -27,7 +27,7 @@
   \item \structure{General idea}
     Given an input, prove some property by decomposition
     Decomposition is done by applying deduction rules
-  \item For details, see \emph{Handbook of Tableau Methods}, Kluwer, 1999
+  \item For details, see \emph{Handbook of Tableau Methods}, Kluwer, 1999 \cite{TableauHandbook}
   \end{itemize}
 \end{frame}
 % ----------------------------------------------------------------------
@@ -181,42 +181,8 @@ All three branches of the tableau are contradictory (cf 2, 5, 7, 8, 10)
 \item <11-> Hence, $a \wedge ((\neg b \wedge (\neg a \vee b)) \vee  \neg\neg\neg a)$ is unsatisfiable
 \end{itemize}
 \end{frame}
-%------------------------------------------------------------
-
-
-%----------------------------------------------------------------
-\begin{frame}{Tableau calculi characterizing ASP solvers}
-  \begin{itemize}
-  \item <1-> ASP solvers combine propagation with case analysis
-  \item <2-> We obtain the following tableau calculi characterizing
-    \begin{eqnarray*}
-      {\mathcal{T}}_{\textit{cmodels-1}}
-      & = &
-      {\mathcal{T}}_{\textit{completion}} \cup \{\textit{Cut}[\atom{P} \cup \body{P}]\} \\
-      {\mathcal{T}}_{\textit{assat}}
-      & = &
-      {\mathcal{T}}_{\textit{completion}} \cup \{\textit{FL}\} \cup \{\textit{Cut}[\atom{P} \cup \body{P}]\}  \\
-      {\mathcal{T}}_{\textit{smodels}}
-      & = &
-      {\mathcal{T}}_{\textit{completion}} \cup \{\textit{WFN}\}\cup \{\textit{Cut}[\atom{P}]\} \\
-      {\mathcal{T}}_{\textit{noMoRe}}
-      & = &
-      {\mathcal{T}}_{\textit{completion}} \cup \{\textit{WFN}\}\cup \{\textit{Cut}[\body{P}]\} \\
-      {\mathcal{T}}_{\textit{nomore}^{++}}
-      & = &
-      {\mathcal{T}}_{\textit{completion}} \cup \{\textit{WFN}\}\cup \{\textit{Cut}[\atom{P} \cup \body{P}]\}
-    \end{eqnarray*}
-  \item<3-> SAT-based ASP solvers,
-        \textit{assat} and \textit{cmodels},\\
-        incrementally add loop formulas to a program's completion
-  \item<4->  Native ASP solvers,
-        \textit{smodels}, \textit{dlv}, \textit{noMoRe}, and \textit{nomore++},
-        essentially differ only in their $\textit{Cut}$ rules
-  \end{itemize}
-\end{frame}
-%------------------------------------------------------------
-
-
+% ----------------------------------------------------------------------
+%
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../../main"
