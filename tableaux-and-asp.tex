@@ -1,4 +1,4 @@
-% ------------------------------------------------------------
+% ----------------------------------------------------------------------
 \begin{frame}{Tableaux and ASP}
   \bigskip
   \begin{itemize}
@@ -36,7 +36,7 @@
 % ------------------------------------------------------------
 \begin{frame}{Tableau rules for ASP at a glance}
   \vspace*{-5mm}
-  \input{characterizations/fig_tableau}
+  \input{figures/fig_tableau}
 \end{frame}
 % ------------------------------------------------------------
 \begin{frame}[c]{More concepts}
@@ -455,7 +455,7 @@ Let $P$ be a normal logic program
 % \item \structure{Note} The rule-based definition of the greatest unfounded set
 %   is more flexible than the atom-based one
 % \end{itemize}
-\item<2-> For a loop $L \in \loops{P}$, define the \alert{external bodies} of $L$ as
+\item<2-> For a loop $L \in \Loops{P}$, define the \alert{external bodies} of $L$ as
 \[
 \EB{L}{P} = \{\body{r} \mid r \in P, \head{r} \in L, \pbody{r} \cap L = \emptyset\}
 \]
@@ -591,7 +591,7 @@ $P'=\{r\in P \mid \pbody{r}\cap F=\emptyset \text{ and } \nbody{r}\cap T=\emptys
 \[
 \begin{array}{@{}cl}
 \Fsigned{B_1},\dots,\Fsigned{B_m} &
-\raisebox{-8pt}[0pt][0pt]{($p \in L, L \in \loops{P}, \EB{L}{P}=\{B_1,\dots,B_m\}$)}
+\raisebox{-8pt}[0pt][0pt]{($p \in L, L \in \Loops{P}, \EB{L}{P}=\{B_1,\dots,B_m\}$)}
 \\\cline{1-1}
 \Fsigned{p}
 \end{array}
@@ -624,7 +624,7 @@ a \leftarrow \neg b \\
 \begin{array}{@{}cl}
 \Tsigned{p} \\
 \Fsigned{B_1},\dots,\Fsigned{B_{i-1}},\Fsigned{B_{i+1}},\dots,\Fsigned{B_m} &
-\raisebox{-8pt}[0pt][0pt]{($p \in L, L \in \loops{P}, \EB{L}{P}=\{B_1,\dots,B_m\}$)}
+\raisebox{-8pt}[0pt][0pt]{($p \in L, L \in \Loops{P}, \EB{L}{P}=\{B_1,\dots,B_m\}$)}
 \\\cline{1-1}
 \Tsigned{B_i}
 \end{array}
@@ -748,4 +748,9 @@ b \leftarrow \neg a &
     \]
   \end{itemize}
 \end{frame}
-%----------------------------------------------------------------
+% ----------------------------------------------------------------------
+%
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../../main"
+%%% End:
