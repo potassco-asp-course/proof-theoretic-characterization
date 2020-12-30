@@ -1,0 +1,1085 @@
+%----------------------------------------------------------------
+\begin{frame}{Proof complexity}
+  \begin{itemize}
+  \item<1-> \alert{Proof complexity} is used for describing the relative efficiency of different proof systems
+    \begin{itemize}
+    \item<2-> [] It compares proof systems based on \alert{minimal refutations}
+    \item<2-> [] It is independent of heuristics
+    \end{itemize}
+  \item<3-> A proof system ${\mathcal{T}}$ \alert{polynomially simulates} a proof system ${\mathcal{T}}'$,
+    if every refutation of ${\mathcal{T}}'$ can be polynomially mapped to a refutation of ${\mathcal{T}}$
+  \item<3-> [] Otherwise, ${\mathcal{T}}$ does not polynomially simulate ${\mathcal{T}}'$
+  \item<4-> For showing that proof system ${\mathcal{T}}$ does not polynomially simulate ${\mathcal{T}}'$,
+    we have to provide an infinite \alert{witnessing family} of programs such that minimal
+    refutations of ${\mathcal{T}}$ asymptotically are exponentially larger than minimal refutations of ${\mathcal{T}}'$
+  \item<4-> [] The size of tableaux is simply the number of their entries
+  \item<5-> We do not need to know the precise number of entries:\\
+    \alert{Counting required $\textit{Cut}$ applications is sufficient !}
+  \end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{${\mathcal{T}}_{\textit{smodels}}$ versus ${\mathcal{T}}_{\textit{noMoRe}}$}
+  \begin{itemize}
+  \item<1-> \alert<8>{${\mathcal{T}}_{\textit{smodels}}$} restricts $\textit{Cut}$ to $\atom{P}$ and \alert<7>{${\mathcal{T}}_{\textit{noMoRe}}$} to $\body{P}$
+
+    \alert<1>{\em Are both approaches similar or is one of them superior to the other?}
+    \medskip
+  \item<2-> Let $\{P^n_a\}$, $\{P^n_b\}$, and $\{P^n_c\}$ be infinite families of programs where
+    \[\scriptsize\hspace{-3pt}
+    \alert<3-4>{P^n_a} =
+    \left\{
+      \begin{array}{@{\,}l@{\,}}
+        x \leftarrow \neg x      \\
+        x \leftarrow a_1, b_1     \\
+        \multicolumn{1}{c}{\vdots}\\
+        x \leftarrow a_n, b_n
+      \end{array}
+    \right\}
+    \
+    \alert<5-6>{P^n_b} =
+    \left\{
+      \begin{array}{@{\,}l@{\ }c@{\ }r@{\,}}
+        \multicolumn{3}{@{\,}l@{\,}}{x \leftarrow c_1,\dots,c_n,\neg x}   \\
+        c_1 \leftarrow a_1                                                 &&
+        c_1 \leftarrow b_1                                                 \\
+        \multicolumn{1}{c}{\vdots}                                         &&
+        \multicolumn{1}{c}{\vdots}                                         \\
+        c_n \leftarrow a_n                                                 &&
+        c_n \leftarrow b_n
+      \end{array}
+    \right\}
+    \
+    \alert<3-4,5-6>{P_c^n} =
+    \left\{
+      \begin{array}{@{\,}l@{\,}}
+        a_1 \leftarrow \neg b_1  \\
+        b_1 \leftarrow \neg a_1  \\
+        \multicolumn{1}{c}{\vdots}\\
+        a_n \leftarrow \neg b_n  \\
+        b_n \leftarrow \neg a_n
+      \end{array}
+    \right\}
+    \]
+  \item <3->
+    In \alert<3>{minimal refutations} for \alert<3>{$P^n_a\cup P^n_c$},
+    \pause[4]
+    the number of applications of
+    \textcolor<4,7>{green}{$\textit{Cut}[\body{P^n_a\cup P^n_c}]$} with
+    \textcolor<4>{green}{${\mathcal{T}}_{\textit{noMoRe}}$} is
+    \textcolor<4,7>{green}{linear} in $n$,
+    whereas
+    \textcolor<4>{red}{${\mathcal{T}}_{\textit{smodels}}$} requires
+    \textcolor<4,8>{red}{exponential}ly many applications of
+    \textcolor<4,8>{red}{$\textit{Cut}[\atom{P^n_a\cup P^n_c}]$}
+  \item <5-> Vice versa, \alert<5>{minimal refutations} for \alert<5>{$P^n_b\cup P^n_c$}
+    \pause[6]
+    require
+    \textcolor<6,8>{green}{linear}ly many applications of
+    \textcolor<6,8>{green}{$\textit{Cut}[\atom{P^n_b\cup P^n_c}]$} with
+    \textcolor<6>{green}{${\mathcal{T}}_{\textit{smodels}}$}
+    and
+    \textcolor<6,7>{red}{exponential}ly many applications of
+    \textcolor<6,7>{red}{$\textit{Cut}[\body{P^n_b\cup P^n_c}]$} with
+    \textcolor<6>{red}{${\mathcal{T}}_{\textit{noMoRe}}$}
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{Relative efficiency}
+  \begin{itemize}
+  \item<1-> As witnessed by $\{P^n_a\cup P^n_c\}$ and $\{P^n_b\cup P^n_c\}$, respectively, \\
+    ${\mathcal{T}}_{\textit{smodels}}$ and ${\mathcal{T}}_{\textit{noMoRe}}$ do not polynomially
+    simulate one another
+  \item<2-> Any refutation of ${\mathcal{T}}_{\textit{smodels}}$ or
+    ${\mathcal{T}}_{\textit{noMoRe}}$ is a refutation of ${\mathcal{T}}_{\textit{nomore}^{++}}$ \\
+    (but not vice versa)
+  \item<3-> Hence
+    \begin{itemize}
+    \item both ${\mathcal{T}}_{\textit{smodels}}$ and ${\mathcal{T}}_{\textit{noMoRe}}$
+      are polynomially simulated by ${\mathcal{T}}_{\textit{nomore}^{++}}$ and
+    \item ${\mathcal{T}}_{\textit{nomore}^{++}}$ is polynomially simulated
+      by neither ${\mathcal{T}}_{\textit{smodels}}$ nor ${\mathcal{T}}_{\textit{noMoRe}}$
+    \end{itemize}
+     \bigskip
+  \item<4-> More generally,
+    the proof system obtained with $\textit{Cut}[\atom{P}\cup\body{P}]$ is \alert{exponentially stronger} than
+    \\
+    the ones with either $\textit{Cut}[\atom{P}]$ or $\textit{Cut}[\body{P}]$
+  \item<5-> Case analyses (at least) on atoms and bodies are mandatory in powerful ASP solvers
+\end{itemize}
+\end{frame}
+%----------------------------------------------------------------
+% \begin{frame}{$\mathcal{T}_{\textit{cmodels}\mathrm{{-}1}}$: Example tableau}
+% %
+% \hfill
+% \begin{minipage}[t]{12cm}
+% \scriptsize
+% \[
+% \begin{array}{llllllllllll}
+% (r_1)  &  a \leftarrow \neg b                  & & &
+% (r_2)  &  b \leftarrow d, \neg a               & & &
+% (r_3)  &  c \leftarrow b, d                            \\[-1mm]
+% (r_4)  &  c \leftarrow g                               & & &
+% (r_5)  &  d \leftarrow c                               & & &
+% (r_6)  &  d \leftarrow g                               \\[-1mm]
+% (r_7)  &  e \leftarrow f, \neg c               & & &
+% (r_8)  &  f \leftarrow \neg g                  & & &
+% (r_9)  &  g \leftarrow \neg a, \neg f
+% \end{array}
+% \]
+% \vspace{-0.7cm}
+% \end{minipage}
+% %
+% \begin{minipage}[t]{16cm}
+% \tiny
+% %
+% \begin{minipage}[t]{4.5cm}
+% \[
+% \ifpdf
+% \hspace{-0.3cm}
+% \else
+% \hspace{-0.5cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(1)}                                       &
+%   \Tsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(2)}                                       &
+%   \Tsigned{\{\neg b\}}                     &
+%   [\textit{BTA}{:}\; r_1, \text{1}]                \\
+% \textbf{(3)}                                       &
+%   \Fsigned{b}                                      &
+%   [\textit{BTB}{:}\; \text{2}]                     \\
+% \textbf{(4)}                                       &
+%   \Fsigned{\{d,\neg a\}}                   &
+%   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+% \textbf{(5)}                                       &
+%   \Fsigned{\{\neg a,\neg f\}}      &
+%   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
+% \textbf{(6)}                                       &
+%   \Fsigned{g}                                      &
+%   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+% \textbf{(7)}                                       &
+%   \Tsigned{\{\neg g\}}                     &
+%   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+% \textbf{(8)}                                       &
+%   \Tsigned{f}                                      &
+%   [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+% \textbf{(9)}                                       &
+%   \Fsigned{\{b,d\}}                                &
+%   [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+% \textbf{(10)}                                      &
+%   \Fsigned{\{g\}}                                  &
+%   [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+% \textbf{(11)}                                      &
+%   \Fsigned{c}                                      &
+%   [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+% \textbf{(12)}                                      &
+%   \Fsigned{\{c\}}                                  &
+%   [\textit{FFB}{:}\;r_5, \text{11}]                \\
+% \textbf{(13)}                                      &
+%   \Fsigned{d}                                      &
+%   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+% \textbf{(14)}                                      &
+%   \Tsigned{\{f,\neg c\}}                   &
+%   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+% \textbf{(15)}                                      &
+%   \Tsigned{e}                                      &
+%   [\textit{FTA}{:}\;r_7, \text{14}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% % \hfill
+% %
+% \begin{minipage}[t]{6cm}
+% \[
+% \hspace{2.5cm}
+% \begin{array}{lcl}
+% \textbf{(16)}                                      &
+%   \Fsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(17)}                                      &
+%   \Fsigned{\{\neg b\}}                     &
+%   [\textit{BFA}{:}\; r_1, \text{16}]               \\
+% \textbf{(18)}                                      &
+%   \Tsigned{b}                                      &
+%   [\textit{BFB}{:}\; \text{17}]                    \\
+% \textbf{(19)}                                      &
+%   \Tsigned{\{d,\neg a\}}                   &
+%   [\textit{BTA}{:}\;r_2, \text{18}]                \\
+% \textbf{(20)}                                      &
+%   \Tsigned{d}                                      &
+%   [\textit{BTB}{:}\;\text{19}]                     \\
+% \textbf{(21)}                                      &
+%   \Tsigned{\{b,d\}}                                &
+%   [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+% \textbf{(22)}                                      &
+%   \Tsigned{c}                                      &
+%   [\textit{FTA}{:}\;r_3, \text{21}]                \\
+% \textbf{(23)}                                      &
+%   \Fsigned{\{f,\neg c\}}                   &
+%   [\textit{FFB}{:}\;r_7, \text{22}]                \\
+% \textbf{(24)}                                      &
+%   \Fsigned{e}                                      &
+%   [\textit{FFA}{:}\;r_7, \text{23}]                \\
+% \textbf{(25)}                                      &
+%   \Tsigned{\{c\}}                                  &
+%   [\textit{FTB}{:}\;r_5, \text{22}]
+% \vspace{-0.7cm}
+% \end{array}
+% \]
+% %
+% \begin{minipage}[t]{1cm}
+% \[
+% \ifpdf
+% \hspace{0.25cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(26)}                                      &
+%   \Tsigned{f}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(27)}                                      & \hspace{-0.1cm}
+%   \Fsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
+%   [\textit{FFB}{:}\;r_9, \text{26}]                \\
+% \textbf{(28)}                                      &
+%   \Fsigned{g}                                      &
+%   [\textit{FFA}{:}\;r_9, \text{27}]                \\
+% \textbf{(29)}                                      &
+%   \Fsigned{\{g\}}                                  &
+%   [\textit{FFB}{:}\;r_4, r_6, \text{28}]            \\
+% \textbf{(30)}                                      &
+%   \Tsigned{\{\neg g\}}                     &
+%   [\textit{FTB}{:}\;r_8, \text{28}]                %\\
+% %\textbf{(31)}                                      &
+% %  \Fsigned{c}                                      &
+% %  [\textit{FL}{:}\;\{c,d\}, \text{29}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% \begin{minipage}[t]{2cm}
+% \[
+% \ifpdf
+% \hspace{3.75cm}
+% \else
+% \hspace{3.5cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(31)}                                      &
+%   \Fsigned{f}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(32)}                                      & \hspace{-0.1cm}
+%   \Tsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
+%   [\textit{FTB}{:}\;r_9, \text{16}, \text{31}]     \\
+% \textbf{(33)}                                      &
+%   \Tsigned{g}                                      &
+%   [\textit{FTA}{:}\;r_9, \text{32}]                \\
+% \textbf{(34)}                                      &
+%   \Tsigned{\{g\}}                                  &
+%   [\textit{FTB}{:}\;r_4, r_6, \text{33}]           \\
+% \textbf{(35)}                                      &
+%   \Fsigned{\{\neg g\}}                     &
+%   [\textit{FFB}{:}\;r_8, \text{33}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% \end{minipage}
+% %
+% \end{minipage}
+% \hfill
+% %
+% \end{frame}
+%----------------------------------------------------------------
+% \begin{frame}{$\mathcal{T}_{\textit{assat}}$: Example tableau}
+% %
+% \hfill
+% \begin{minipage}[t]{12cm}
+% \scriptsize
+% \[
+% \begin{array}{llllllllllll}
+% (r_1)  &  a \leftarrow \neg b                  & & &
+% (r_2)  &  b \leftarrow d, \neg a               & & &
+% (r_3)  &  c \leftarrow b, d                            \\[-1mm]
+% (r_4)  &  c \leftarrow g                               & & &
+% (r_5)  &  d \leftarrow c                               & & &
+% (r_6)  &  d \leftarrow g                               \\[-1mm]
+% (r_7)  &  e \leftarrow f, \neg c               & & &
+% (r_8)  &  f \leftarrow \neg g                  & & &
+% (r_9)  &  g \leftarrow \neg a, \neg f
+% \end{array}
+% \]
+% \vspace{-0.7cm}
+% \end{minipage}
+% %
+% \begin{minipage}[t]{16cm}
+% \tiny
+% %
+% \begin{minipage}[t]{4.5cm}
+% \[
+% \ifpdf
+% \hspace{-0.3cm}
+% \else
+% \hspace{-0.5cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(1)}                                       &
+%   \Tsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(2)}                                       &
+%   \Tsigned{\{\neg b\}}                     &
+%   [\textit{BTA}{:}\; r_1, \text{1}]                \\
+% \textbf{(3)}                                       &
+%   \Fsigned{b}                                      &
+%   [\textit{BTB}{:}\; \text{2}]                     \\
+% \textbf{(4)}                                       &
+%   \Fsigned{\{d,\neg a\}}                   &
+%   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+% \textbf{(5)}                                       &
+%   \Fsigned{\{\neg a,\neg f\}}      &
+%   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
+% \textbf{(6)}                                       &
+%   \Fsigned{g}                                      &
+%   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+% \textbf{(7)}                                       &
+%   \Tsigned{\{\neg g\}}                     &
+%   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+% \textbf{(8)}                                       &
+%   \Tsigned{f}                                      &
+%   [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+% \textbf{(9)}                                       &
+%   \Fsigned{\{b,d\}}                                &
+%   [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+% \textbf{(10)}                                      &
+%   \Fsigned{\{g\}}                                  &
+%   [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+% \textbf{(11)}                                      &
+%   \Fsigned{c}                                      &
+%   [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+% \textbf{(12)}                                      &
+%   \Fsigned{\{c\}}                                  &
+%   [\textit{FFB}{:}\;r_5, \text{11}]                \\
+% \textbf{(13)}                                      &
+%   \Fsigned{d}                                      &
+%   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+% \textbf{(14)}                                      &
+%   \Tsigned{\{f,\neg c\}}                   &
+%   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+% \textbf{(15)}                                      &
+%   \Tsigned{e}                                      &
+%   [\textit{FTA}{:}\;r_7, \text{14}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% % \hfill
+% %
+% \begin{minipage}[t]{6cm}
+% \[
+% \hspace{2.5cm}
+% \begin{array}{lcl}
+% \textbf{(16)}                                      &
+%   \Fsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(17)}                                      &
+%   \Fsigned{\{\neg b\}}                     &
+%   [\textit{BFA}{:}\; r_1, \text{16}]               \\
+% \textbf{(18)}                                      &
+%   \Tsigned{b}                                      &
+%   [\textit{BFB}{:}\; \text{17}]                    \\
+% \textbf{(19)}                                      &
+%   \Tsigned{\{d,\neg a\}}                   &
+%   [\textit{BTA}{:}\;r_2, \text{18}]                \\
+% \textbf{(20)}                                      &
+%   \Tsigned{d}                                      &
+%   [\textit{BTB}{:}\;\text{19}]                     \\
+% \textbf{(21)}                                      &
+%   \Tsigned{\{b,d\}}                                &
+%   [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+% \textbf{(22)}                                      &
+%   \Tsigned{c}                                      &
+%   [\textit{FTA}{:}\;r_3, \text{21}]                \\
+% \textbf{(23)}                                      &
+%   \Fsigned{\{f,\neg c\}}                   &
+%   [\textit{FFB}{:}\;r_7, \text{22}]                \\
+% \textbf{(24)}                                      &
+%   \Fsigned{e}                                      &
+%   [\textit{FFA}{:}\;r_7, \text{23}]                \\
+% \textbf{(25)}                                      &
+%   \Tsigned{\{c\}}                                  &
+%   [\textit{FTB}{:}\;r_5, \text{22}]
+% \vspace{-0.7cm}
+% \end{array}
+% \]
+% %
+% \begin{minipage}[t]{1cm}
+% \[
+% \ifpdf
+% \hspace{0.25cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(26)}                                      &
+%   \Tsigned{f}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(27)}                                      & \hspace{-0.1cm}
+%   \Fsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
+%   [\textit{FFB}{:}\;r_9, \text{26}]                \\
+% \textbf{(28)}                                      &
+%   \Fsigned{g}                                      &
+%   [\textit{FFA}{:}\;r_9, \text{27}]                \\
+% \textbf{(29)}                                      &
+%   \Fsigned{\{g\}}                                  &
+%   [\textit{FFB}{:}\;r_4, r_6, \text{28}]            \\
+% \textbf{(30)}                                      &
+%   \Tsigned{\{\neg g\}}                     &
+%   [\textit{FTB}{:}\;r_8, \text{28}]                \\
+% \textbf{(31)}                                      &
+%   \Fsigned{c}                                      &
+%   [\textit{FL}{:}\;\{c,d\}, \text{29}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% \begin{minipage}[t]{2cm}
+% \[
+% \ifpdf
+% \hspace{3.75cm}
+% \else
+% \hspace{3.5cm}
+% \fi
+% \begin{array}{lcl}
+% \textbf{(32)}                                      &
+%   \Fsigned{f}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(33)}                                      & \hspace{-0.1cm}
+%   \Tsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
+%   [\textit{FTB}{:}\;r_9, \text{16}, \text{32}]     \\
+% \textbf{(34)}                                      &
+%   \Tsigned{g}                                      &
+%   [\textit{FTA}{:}\;r_9, \text{33}]                \\
+% \textbf{(35)}                                      &
+%   \Tsigned{\{g\}}                                  &
+%   [\textit{FTB}{:}\;r_4, r_6, \text{34}]           \\
+% \textbf{(36)}                                      &
+%   \Fsigned{\{\neg g\}}                     &
+%   [\textit{FFB}{:}\;r_8, \text{34}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% \end{minipage}
+% %
+% \end{minipage}
+% \hfill
+% %
+% \end{frame}
+%----------------------------------------------------------------
+\begin{frame}{$\mathcal{T}_{\textit{smodels}}$: Example tableau}
+\small
+\[
+\begin{array}{llllllllllll}
+(r_1)  &  a \leftarrow \neg b                  & & &
+(r_2)  &  b \leftarrow d, \neg a               & & &
+(r_3)  &  c \leftarrow b, d                            \\
+(r_4)  &  c \leftarrow g                               & & &
+(r_5)  &  d \leftarrow c                               & & &
+(r_6)  &  d \leftarrow g                               \\
+(r_7)  &  e \leftarrow f, \neg c               & & &
+(r_8)  &  f \leftarrow \neg g                  & & &
+(r_9)  &  g \leftarrow \neg a, \neg f
+\end{array}
+\]
+\begin{center}
+\hspace*{-15pt}
+\begin{minipage}[t]{16cm}
+\tiny
+\begin{minipage}[t]{4.5cm}
+\[
+\hspace{-0.2cm}
+\begin{array}{lcl}
+\textbf{(1)}                                       &
+  \Tsigned{a}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(2)}                                       &
+  \Tsigned{\{\neg b\}}                     &
+  [\textit{BTA}{:}\; r_1, \text{1}]                \\
+\textbf{(3)}                                       &
+  \Fsigned{b}                                      &
+  [\textit{BTB}{:}\; \text{2}]                     \\
+\textbf{(4)}                                       &
+  \Fsigned{\{d,\neg a\}}                   &
+  [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+\textbf{(5)}                                       &
+  \Fsigned{\{\neg a,\neg f\}}      &
+  [\textit{FFB}{:}\;r_9, \text{1}]                 \\
+\textbf{(6)}                                       &
+  \Fsigned{g}                                      &
+  [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+\textbf{(7)}                                       &
+  \Tsigned{\{\neg g\}}                     &
+  [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+\textbf{(8)}                                       &
+  \Tsigned{f}                                      &
+  [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+\textbf{(9)}                                       &
+  \Fsigned{\{b,d\}}                                &
+  [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+\textbf{(10)}                                      &
+  \Fsigned{\{g\}}                                  &
+  [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+\textbf{(11)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+\textbf{(12)}                                      &
+  \Fsigned{\{c\}}                                  &
+  [\textit{FFB}{:}\;r_5, \text{11}]                \\
+\textbf{(13)}                                      &
+  \Fsigned{d}                                      &
+  [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+\textbf{(14)}                                      &
+  \Tsigned{\{f,\neg c\}}                   &
+  [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+\textbf{(15)}                                      &
+  \Tsigned{e}                                      &
+  [\textit{FTA}{:}\;r_7, \text{14}]
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{6cm}
+\[
+\hspace{2.2cm}
+\begin{array}{lcl}
+\textbf{(16)}                                      &
+  \Fsigned{a}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(17)}                                      &
+  \Fsigned{\{\neg b\}}                     &
+  [\textit{BFA}{:}\; r_1, \text{16}]               \\
+\textbf{(18)}                                      &
+  \Tsigned{b}                                      &
+  [\textit{BFB}{:}\; \text{17}]                    \\
+\textbf{(19)}                                      &
+  \Tsigned{\{d,\neg a\}}                   &
+  [\textit{BTA}{:}\;r_2, \text{18}]                \\
+\textbf{(20)}                                      &
+  \Tsigned{d}                                      &
+  [\textit{BTB}{:}\;\text{19}]                     \\
+\textbf{(21)}                                      &
+  \Tsigned{\{b,d\}}                                &
+  [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+\textbf{(22)}                                      &
+  \Tsigned{c}                                      &
+  [\textit{FTA}{:}\;r_3, \text{21}]                \\
+\textbf{(23)}                                      &
+  \Fsigned{\{f,\neg c\}}                   &
+  [\textit{FFB}{:}\;r_7, \text{22}]                \\
+\textbf{(24)}                                      &
+  \Fsigned{e}                                      &
+  [\textit{FFA}{:}\;r_7, \text{23}]                \\
+\textbf{(25)}                                      &
+  \Tsigned{\{c\}}                                  &
+  [\textit{FTB}{:}\;r_5, \text{22}]
+\vspace{-0.7cm}
+\end{array}
+\]
+%
+\begin{minipage}[t]{1cm}
+\[
+\hspace{0.25cm}
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(26)}                                      &
+  \Tsigned{f}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(27)}                                      & \hspace{-0.1cm}
+  \Fsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
+  [\textit{FFB}{:}\;r_9, \text{26}]                \\
+\textbf{(28)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{WFN}{:}\;\text{27}]
+\end{array}
+\]
+\end{minipage}
+%
+\begin{minipage}[t]{2cm}
+\[
+\hspace{2.75cm}
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(29)}                                      &
+  \Fsigned{f}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(30)}                                      & \hspace{-0.1cm}
+  \Tsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
+  [\textit{FTB}{:}\;r_9, \text{16}, \text{29}]     \\
+\textbf{(31)}                                      &
+  \Tsigned{g}                                      &
+  [\textit{FTA}{:}\;r_9, \text{30}]                \\
+\textbf{(32)}                                      &
+  \Tsigned{\{g\}}                                  &
+  [\textit{FTB}{:}\;r_4, r_6, \text{31}]           \\
+\textbf{(33)}                                      &
+  \Fsigned{\{\neg g\}}                     &
+  [\textit{FFB}{:}\;r_8, \text{31}]
+\end{array}
+\]
+\end{minipage}
+\end{minipage}
+\end{minipage}
+\end{center}
+\bigskip
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{$\mathcal{T}_{\textit{noMoRe}}$: Example tableau}
+\small
+\[
+\begin{array}{llllllllllll}
+(r_1)  &  a \leftarrow \neg b                  & & &
+(r_2)  &  b \leftarrow d, \neg a               & & &
+(r_3)  &  c \leftarrow b, d                            \\
+(r_4)  &  c \leftarrow g                               & & &
+(r_5)  &  d \leftarrow c                               & & &
+(r_6)  &  d \leftarrow g                               \\
+(r_7)  &  e \leftarrow f, \neg c               & & &
+(r_8)  &  f \leftarrow \neg g                  & & &
+(r_9)  &  g \leftarrow \neg a, \neg f
+\end{array}
+\]
+\begin{center}
+\hspace*{-15pt}
+\begin{minipage}[t]{16cm}
+\tiny
+\begin{minipage}[t]{4.5cm}
+\[
+\hspace{-0.2cm}
+\begin{array}{lcl}
+\textbf{(1)}                                       &
+  \Tsigned{\{\neg b\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(2)}                                       &
+  \Tsigned{a}                                      &
+  [\textit{FTA}{:}\; r_1, \text{1}]                \\
+\textbf{(3)}                                       &
+  \Fsigned{b}                                      &
+  [\textit{BTB}{:}\; \text{1}]                     \\
+\textbf{(4)}                                       &
+  \Fsigned{\{d,\neg a\}}                   &
+  [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+\textbf{(5)}                                       &
+  \Fsigned{\{\neg a,\neg f\}}      &
+  [\textit{FFB}{:}\;r_9, \text{2}]                 \\
+\textbf{(6)}                                       &
+  \Fsigned{g}                                      &
+  [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+\textbf{(7)}                                       &
+  \Tsigned{\{\neg g\}}                     &
+  [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+\textbf{(8)}                                       &
+  \Tsigned{f}                                      &
+  [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+\textbf{(9)}                                       &
+  \Fsigned{\{b,d\}}                                &
+  [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+\textbf{(10)}                                      &
+  \Fsigned{\{g\}}                                  &
+  [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+\textbf{(11)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+\textbf{(12)}                                      &
+  \Fsigned{\{c\}}                                  &
+  [\textit{FFB}{:}\;r_5, \text{11}]                \\
+\textbf{(13)}                                      &
+  \Fsigned{d}                                      &
+  [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+\textbf{(14)}                                      &
+  \Tsigned{\{f,\neg c\}}                   &
+  [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+\textbf{(15)}                                      &
+  \Tsigned{e}                                      &
+  [\textit{FTA}{:}\;r_7, \text{14}]
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{6cm}
+\[
+\hspace{2.2cm}
+\begin{array}{lcl}
+\textbf{(16)}                                      &
+  \Fsigned{\{\neg b\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(17)}                                      &
+  \Fsigned{a}                                      &
+  [\textit{FFA}{:}\; r_1, \text{16}]               \\
+\textbf{(18)}                                      &
+  \Tsigned{b}                                      &
+  [\textit{BFB}{:}\; \text{16}]                    \\
+\textbf{(19)}                                      &
+  \Tsigned{\{d,\neg a\}}                   &
+  [\textit{BTA}{:}\;r_2, \text{18}]                \\
+\textbf{(20)}                                      &
+  \Tsigned{d}                                      &
+  [\textit{BTB}{:}\;\text{19}]                     \\
+\textbf{(21)}                                      &
+  \Tsigned{\{b,d\}}                                &
+  [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+\textbf{(22)}                                      &
+  \Tsigned{c}                                      &
+  [\textit{FTA}{:}\;r_3, \text{21}]                \\
+\textbf{(23)}                                      &
+  \Fsigned{\{f,\neg c\}}                   &
+  [\textit{FFB}{:}\;r_7, \text{22}]                \\
+\textbf{(24)}                                      &
+  \Fsigned{e}                                      &
+  [\textit{FFA}{:}\;r_7, \text{23}]                \\
+\textbf{(25)}                                      &
+  \Tsigned{\{c\}}                                  &
+  [\textit{FTB}{:}\;r_5, \text{22}]
+\vspace{-0.7cm}
+\end{array}
+\]
+\begin{minipage}[t]{1cm}
+\[
+\hspace{0.25cm}
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(26)}                                      &
+  \Tsigned{\{\neg g\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(27)}                                      &
+  \Fsigned{g}                                      &
+  [\textit{BTB}{:}\;\text{26}]                     \\
+\textbf{(28)}                                      & \hspace{-0.1cm}
+  \Fsigned{\{g\}}                                  \hspace{-0.1cm} &
+  [\textit{FFB}{:}\;r_4, r_6, \text{27}]           \\
+\textbf{(29)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{WFN}{:}\;\text{28}]
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{2cm}
+\[
+\hspace{2.75cm}
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(30)}                                      &
+  \Fsigned{\{\neg g\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(31)}                                      &
+  \Tsigned{g}                                      &
+  [\textit{BFB}{:}\;\text{30}]                     \\
+\textbf{(32)}                                      &
+  \Tsigned{\{g\}}                                  &
+  [\textit{FTB}{:}\;r_4, r_6, \text{31}]           \\
+\textbf{(33)}                                      &
+  \Fsigned{f}                                      &
+  [\textit{FFA}{:}\;r_8, \text{30}]                \\
+\textbf{(34)}                                      & \hspace{-0.1cm}
+  \Tsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
+  [\textit{FTB}{:}\;r_9, \text{17}, \text{33}]
+\end{array}
+\]
+\end{minipage}
+\end{minipage}
+\end{minipage}
+\end{center}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}{$\mathcal{T}_{\textit{nomore}^{++}}$: Example tableau}
+\small
+\[
+\begin{array}{llllllllllll}
+(r_1)  &  a \leftarrow \neg b                  & & &
+(r_2)  &  b \leftarrow d, \neg a               & & &
+(r_3)  &  c \leftarrow b, d                            \\
+(r_4)  &  c \leftarrow g                               & & &
+(r_5)  &  d \leftarrow c                               & & &
+(r_6)  &  d \leftarrow g                               \\
+(r_7)  &  e \leftarrow f, \neg c               & & &
+(r_8)  &  f \leftarrow \neg g                  & & &
+(r_9)  &  g \leftarrow \neg a, \neg f
+\end{array}
+\]
+\begin{center}
+\hspace*{-15pt}
+\begin{minipage}[t]{16cm}
+\tiny
+\begin{minipage}[t]{4.5cm}
+\[
+\hspace{-0.2cm}
+\begin{array}{lcl}
+\textbf{(1)}                                       &
+  \Tsigned{a}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(2)}                                       &
+  \Tsigned{\{\neg b\}}                     &
+  [\textit{BTA}{:}\; r_1, \text{1}]                \\
+\textbf{(3)}                                       &
+  \Fsigned{b}                                      &
+  [\textit{BTB}{:}\; \text{2}]                     \\
+\textbf{(4)}                                       &
+  \Fsigned{\{d,\neg a\}}                   &
+  [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+\textbf{(5)}                                       &
+  \Fsigned{\{\neg a,\neg f\}}      &
+  [\textit{FFB}{:}\;r_9, \text{1}]                 \\
+\textbf{(6)}                                       &
+  \Fsigned{g}                                      &
+  [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+\textbf{(7)}                                       &
+  \Tsigned{\{\neg g\}}                     &
+  [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+\textbf{(8)}                                       &
+  \Tsigned{f}                                      &
+  [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+\textbf{(9)}                                       &
+  \Fsigned{\{b,d\}}                                &
+  [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+\textbf{(10)}                                      &
+  \Fsigned{\{g\}}                                  &
+  [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+\textbf{(11)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+\textbf{(12)}                                      &
+  \Fsigned{\{c\}}                                  &
+  [\textit{FFB}{:}\;r_5, \text{11}]                \\
+\textbf{(13)}                                      &
+  \Fsigned{d}                                      &
+  [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+\textbf{(14)}                                      &
+  \Tsigned{\{f,\neg c\}}                   &
+  [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+\textbf{(15)}                                      &
+  \Tsigned{e}                                      &
+  [\textit{FTA}{:}\;r_7, \text{14}]
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{6cm}
+\[
+\hspace{2.2cm}
+\begin{array}{lcl}
+\textbf{(16)}                                      &
+  \Fsigned{a}                                      &
+  [\textit{Cut}]                                   \\
+\textbf{(17)}                                      &
+  \Fsigned{\{\neg b\}}                     &
+  [\textit{BFA}{:}\; r_1, \text{16}]               \\
+\textbf{(18)}                                      &
+  \Tsigned{b}                                      &
+  [\textit{BFB}{:}\; \text{17}]                    \\
+\textbf{(19)}                                      &
+  \Tsigned{\{d,\neg a\}}                   &
+  [\textit{BTA}{:}\;r_2, \text{18}]                \\
+\textbf{(20)}                                      &
+  \Tsigned{d}                                      &
+  [\textit{BTB}{:}\;\text{19}]                     \\
+\textbf{(21)}                                      &
+  \Tsigned{\{b,d\}}                                &
+  [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+\textbf{(22)}                                      &
+  \Tsigned{c}                                      &
+  [\textit{FTA}{:}\;r_3, \text{21}]                \\
+\textbf{(23)}                                      &
+  \Fsigned{\{f,\neg c\}}                   &
+  [\textit{FFB}{:}\;r_7, \text{22}]                \\
+\textbf{(24)}                                      &
+  \Fsigned{e}                                      &
+  [\textit{FFA}{:}\;r_7, \text{23}]                \\
+\textbf{(25)}                                      &
+  \Tsigned{\{c\}}                                  &
+  [\textit{FTB}{:}\;r_5, \text{22}]
+\vspace{-0.7cm}
+\end{array}
+\]
+%
+\begin{minipage}[t]{1cm}
+\[
+%\ifpdf
+\hspace{0.25cm}
+%\fi
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(26)}                                      &
+  \Tsigned{\{\neg g\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(27)}                                      &
+  \Fsigned{g}                                      &
+  [\textit{BTB}{:}\;\text{26}]                     \\
+\textbf{(28)}                                      & \hspace{-0.1cm}
+  \Fsigned{\{g\}}                                  \hspace{-0.1cm} &
+  [\textit{FFB}{:}\;r_4, r_6, \text{27}]           \\
+\textbf{(29)}                                      &
+  \Fsigned{c}                                      &
+  [\textit{WFN}{:}\;\text{28}]
+\end{array}
+\]
+\end{minipage}
+%
+\begin{minipage}[t]{2cm}
+\[
+%\ifpdf
+\hspace{2.75cm}
+%\else
+%\hspace{3.5cm}
+%\fi
+\begin{array}{l@{~~}c@{~~}l}
+\textbf{(30)}                                      &
+  \Fsigned{\{\neg g\}}                     &
+  [\textit{Cut}]                                   \\
+\textbf{(31)}                                      &
+  \Tsigned{g}                                      &
+  [\textit{BFB}{:}\;\text{30}]                     \\
+\textbf{(32)}                                      &
+  \Tsigned{\{g\}}                                  &
+  [\textit{FTB}{:}\;r_4, r_6, \text{31}]           \\
+\textbf{(33)}                                      &
+  \Fsigned{f}                                      &
+  [\textit{FFA}{:}\;r_8, \text{30}]                \\
+\textbf{(34)}                                      & \hspace{-0.1cm}
+  \Tsigned{\{\neg a,\neg f\}}      \hspace{-0.1cm} &
+  [\textit{FTB}{:}\;r_9, \text{16}, \text{33}]
+\end{array}
+\]
+\end{minipage}
+\end{minipage}
+\end{minipage}
+\end{center}
+\end{frame}
+%----------------------------------------------------------------
+% \begin{frame}{$\mathcal{T}_{\textit{future}}$: Example tableau}
+% \vspace{-1.2cm}
+% %
+% \hfill
+% \begin{minipage}[t]{12cm}
+% \scriptsize
+% \[
+% \begin{array}{llllllllllll}
+% (r_1)  &  a \leftarrow \neg b                  & & &
+% (r_2)  &  b \leftarrow d, \neg a               & & &
+% (r_3)  &  c \leftarrow b, d                            \\[-1mm]
+% (r_4)  &  c \leftarrow g                               & & &
+% (r_5)  &  d \leftarrow c                               & & &
+% (r_6)  &  d \leftarrow g                               \\[-1mm]
+% (r_7)  &  e \leftarrow f, \neg c               & & &
+% (r_8)  &  f \leftarrow \neg g                  & & &
+% (r_9)  &  g \leftarrow \neg a, \neg f
+% \end{array}
+% \]
+% \vspace{-0.7cm}
+% \end{minipage}
+% %
+% \begin{minipage}[t]{16cm}
+% \scriptsize
+% %
+% \hspace{-0.5cm}
+% \begin{minipage}[t]{7cm}
+% \[
+% \begin{array}{lcl}
+% \textbf{(1)}                                       &
+%   \Tsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(2)}                                       &
+%   \Tsigned{\{\neg b\}}                     &
+%   [\textit{BTA}{:}\; r_1, \text{1}]                \\
+% \textbf{(3)}                                       &
+%   \Fsigned{b}                                      &
+%   [\textit{BTB}{:}\; \text{2}]                     \\
+% \textbf{(4)}                                       &
+%   \Fsigned{\{d,\neg a\}}                   &
+%   [\textit{BFA}{:}\;r_2, \text{3}]                 \\
+% \textbf{(5)}                                       &
+%   \Fsigned{\{\neg a,\neg f\}}      &
+%   [\textit{FFB}{:}\;r_9, \text{1}]                 \\
+% \textbf{(6)}                                       &
+%   \Fsigned{g}                                      &
+%   [\textit{FFA}{:}\;r_9, \text{5}]                 \\
+% \textbf{(7)}                                       &
+%   \Tsigned{\{\neg g\}}                     &
+%   [\textit{FTB}{:}\;r_8, \text{6}]                 \\
+% \textbf{(8)}                                       &
+%   \Tsigned{f}                                      &
+%   [\textit{FTA}{:}\;r_8, \text{7}]                 \\
+% \textbf{(9)}                                       &
+%   \Fsigned{\{b,d\}}                                &
+%   [\textit{FFB}{:}\;r_3, \text{3}]                 \\
+% \textbf{(10)}                                      &
+%   \Fsigned{\{g\}}                                  &
+%   [\textit{FFB}{:}\;r_4, r_6, \text{6}]            \\
+% \textbf{(11)}                                      &
+%   \Fsigned{c}                                      &
+%   [\textit{FFA}{:}\;r_3,r_4, \text{9}, \text{10}]  \\
+% \textbf{(12)}                                      &
+%   \Fsigned{\{c\}}                                  &
+%   [\textit{FFB}{:}\;r_5, \text{11}]                \\
+% \textbf{(13)}                                      &
+%   \Fsigned{d}                                      &
+%   [\textit{FFA}{:}\;r_5,r_6, \text{10}, \text{12}] \\
+% \textbf{(14)}                                      &
+%   \Tsigned{\{f,\neg c\}}                   &
+%   [\textit{FTB}{:}\;r_7, \text{8}, \text{11}]      \\
+% \textbf{(15)}                                      &
+%   \Tsigned{e}                                      &
+%   [\textit{FTA}{:}\;r_7, \text{14}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% % \hfill
+% %
+% \hspace{-0.5cm}
+% \begin{minipage}[t]{7cm}
+% \[
+% \begin{array}{lcl}
+% \textbf{(16)}                                      &
+%   \Fsigned{a}                                      &
+%   [\textit{Cut}]                                   \\
+% \textbf{(17)}                                      &
+%   \Fsigned{\{\neg b\}}                     &
+%   [\textit{BFA}{:}\; r_1, \text{16}]               \\
+% \textbf{(18)}                                      &
+%   \Tsigned{b}                                      &
+%   [\textit{BFB}{:}\; \text{17}]                    \\
+% \textbf{(19)}                                      &
+%   \Tsigned{\{d,\neg a\}}                   &
+%   [\textit{BTA}{:}\;r_2, \text{18}]                \\
+% \textbf{(20)}                                      &
+%   \Tsigned{d}                                      &
+%   [\textit{BTB}{:}\;\text{19}]                     \\
+% \textbf{(21)}                                      &
+%   \Tsigned{\{b,d\}}                                &
+%   [\textit{FTB}{:}\;r_3, \text{18}, \text{20}]     \\
+% \textbf{(22)}                                      &
+%   \Tsigned{c}                                      &
+%   [\textit{FTA}{:}\;r_3, \text{21}]                \\
+% \textbf{(23)}                                      &
+%   \Fsigned{\{f,\neg c\}}                   &
+%   [\textit{FFB}{:}\;r_7, \text{22}]                \\
+% \textbf{(24)}                                      &
+%   \Fsigned{e}                                      &
+%   [\textit{FFA}{:}\;r_7, \text{23}]                \\
+% \textbf{(25)}                                      &
+%   \Tsigned{\{c\}}                                  &
+%   [\textit{FTB}{:}\;r_5, \text{22}]                \\
+% \textbf{(26)}                                      &
+%   \Tsigned{\{g\}}                                  &
+%   [\textit{BL}{:}\;\{c,d\}, \text{20}]             \\
+% \textbf{(27)}                                      &
+%   \Tsigned{g}                                      &
+%   [\textit{BTB}{:}\;\text{26}]                     \\
+% \textbf{(28)}                                      &
+%   \Tsigned{\{\neg a,\neg f\}}      &
+%   [\textit{BTA}{:}\;r_9, \text{27}]                \\
+% \textbf{(29)}                                      &
+%   \Fsigned{\{\neg g\}}                     &
+%   [\textit{FFB}{:}\;r_8, \text{27}]                \\
+% \textbf{(30)}                                      &
+%   \Fsigned{f}                                      &
+%   [\textit{FFA}{:}\;r_8, \text{29}]
+% \end{array}
+% \]
+% \end{minipage}
+% %
+% \vspace{-2cm}
+% \end{minipage}
+% \hfill
+% %
+% \end{frame}
+%----------------------------------------------------------------
